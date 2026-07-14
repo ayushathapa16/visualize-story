@@ -1,0 +1,808 @@
+/* ==========================================================================
+   Base layout, frame scaffolding, narration, UI chrome.
+   ========================================================================== */
+
+@import '@fontsource/fraunces/400.css';
+@import '@fontsource/fraunces/500.css';
+@import '@fontsource/fraunces/600-italic.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--cream);
+  overflow-x: hidden;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Transform model for SVG (important - see engine/svg.js `pivot`):
+   GSAP writes a CSS `transform`, and a percentage `transform-origin` resolves
+   against the *viewBox*, not the element - so percentage origins pivot around a
+   point far off-screen. `transform-box: fill-box` is not a fix either, because
+   the SVG `transform` attribute maps to the same CSS property, so fill-box
+   re-interprets attribute rotate() origins and scrambles them.
+
+   So: every element GSAP rotates or scales is drawn around its OWN local (0,0)
+   and positioned by an attribute-translated `pivot()` wrapper that GSAP never
+   touches. The default origin (0,0) is then exactly the pivot we want. */
+
+/* --------------------------------------------------------------------------
+   Frame scaffolding - each <section.frame> is a story beat.
+   .frame--tall reserves extra scroll distance so a pinned timeline can scrub.
+   -------------------------------------------------------------------------- */
+.frame {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: clip;
+}
+
+.frame--tall {
+  min-height: 260vh;
+}
+
+/* The visual stage that gets pinned while the frame scrubs. */
+.frame__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow: clip;
+}
+
+.frame__svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* On portrait screens the fitted 1600×900 stage would render tiny (the whole
+   width squeezed into ~390px). Scale the stage up so the action - which lives
+   in the middle ~1000 units - fills the screen; the empty margins crop away. */
+@media (max-aspect-ratio: 1/1) {
+  .frame__svg {
+    transform: scale(1.7);
+    transform-origin: center center;
+  }
+  .narration {
+    font-size: var(--step-0);
+    max-width: 88vw;
+  }
+}
+
+/* The camera group inside each stage svg is transformed by engine/camera.js */
+
+/* --------------------------------------------------------------------------
+   Narration - restrained, cinematic captions.
+   -------------------------------------------------------------------------- */
+.narration {
+  position: absolute;
+  z-index: 5;
+  max-width: min(90vw, 44ch);
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.28;
+  font-size: var(--step-1);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  pointer-events: none;
+}
+
+.narration--center {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.narration--lower {
+  left: 50%;
+  bottom: 9vh;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.narration--left {
+  left: max(6vw, 5%);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.narration p {
+  margin: 0 0 0.4em;
+  opacity: 0; /* revealed by engine/reveal.js */
+}
+.narration .em {
+  font-style: italic;
+  color: var(--terracotta);
+}
+.narration .term {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* Two-voice scenes: Willow reacts, the narrator explains. They must not read as
+   one paragraph, so Willow keeps the serif voice at full size while the narrator
+   drops to the smaller sans caption - the same register the annotations use.
+   The block is taller than a single caption, so cap it and let the wider gap
+   below do the separating rather than adding rules or quotes marks in markup. */
+.narration--duet {
+  max-width: min(92vw, 52ch);
+}
+.narration__willow {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--step-1);
+  color: var(--terracotta);
+}
+.narration--duet .narration__willow {
+  margin-bottom: 0.55em;
+}
+.narration__narrator {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  letter-spacing: 0.005em;
+  color: var(--ink-soft);
+}
+
+/* On dark frames, flip narration to light ink. `.narration--on-dark` does the
+   same for a caption that lands on a fade-to-black inside an otherwise light
+   frame (Scene 22's closing line). */
+.frame[data-mood='night'] .narration,
+.narration--on-dark {
+  color: var(--paper);
+}
+.frame[data-mood='night'] .narration__narrator,
+.narration--on-dark .narration__narrator {
+  color: rgba(244, 236, 216, 0.82);
+}
+.frame[data-mood='night'] .narration__willow,
+.narration--on-dark .narration__willow {
+  color: var(--mustard);
+}
+
+/* Short viewports are where narration and in-SVG labels collide: captions are
+   pinned to the viewport bottom while SVG text scales with the viewBox, so they
+   converge as the window gets shorter. The duet block is two lines taller than
+   the old single caption, so it needs to shrink first. */
+@media (max-height: 680px) {
+  .narration--duet .narration__willow {
+    font-size: var(--step-0);
+    margin-bottom: 0.35em;
+  }
+  .narration--duet .narration__narrator {
+    font-size: var(--step--1);
+    line-height: 1.35;
+  }
+}
+
+/* Small data annotation (revealed after understanding) */
+.annotation {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: rgba(244, 236, 216, 0.82);
+  border-left: 3px solid var(--mustard);
+  padding: 0.55em 0.8em;
+  border-radius: 3px;
+  max-width: 30ch;
+  box-shadow: var(--shadow-paper-soft);
+  opacity: 0;
+}
+
+.big-term {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--step-3);
+  letter-spacing: -0.01em;
+  color: var(--terracotta);
+  text-align: center;
+  opacity: 0;
+}
+
+.big-term--center {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  max-width: min(88vw, 16ch);
+  text-wrap: balance;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Choice (Frame 16) - the one clickable moment. Narration is pointer-events
+   none, so anything the audience can actually press needs its own surface.
+   -------------------------------------------------------------------------- */
+/* Sits in the lower band while active. Once a choice is made it fades right
+   out - the outcome caption takes over the same band (pinned at bottom: 9vh),
+   and a lingering half-opacity block would print straight through it. */
+.choice {
+  position: absolute;
+  left: 50%;
+  bottom: 11vh;
+  transform: translateX(-50%);
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(92vw, 40rem);
+  transition: opacity 0.6s var(--ease-nature);
+}
+.choice.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+.choice__q {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  color: var(--ink);
+  text-align: center;
+  text-wrap: balance;
+}
+.choice__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+}
+.choice__btn {
+  pointer-events: auto;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid rgba(46, 42, 36, 0.2);
+  border-radius: 999px;
+  padding: 0.6em 1.3em;
+  cursor: pointer;
+  box-shadow: var(--shadow-paper-soft);
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+}
+.choice__btn:hover:not(:disabled) {
+  background: #fff;
+  transform: translateY(-2px);
+}
+.choice__btn:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 2px;
+}
+.choice__btn:disabled {
+  cursor: default;
+}
+.choice__btn.is-chosen {
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   Panel - the opt-in side drawer (components/panel.js).
+   The story shows; the drawer explains. Nothing load-bearing lives in here.
+   -------------------------------------------------------------------------- */
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  visibility: hidden;
+  pointer-events: none;
+}
+.panel.is-open {
+  visibility: visible;
+  pointer-events: auto;
+}
+.panel__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 21, 17, 0.42);
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+.panel.is-open .panel__scrim {
+  opacity: 1;
+}
+.panel__dialog {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(92vw, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--paper);
+  box-shadow: -18px 0 48px rgba(24, 21, 17, 0.22);
+  padding: 3.4rem 2rem 3rem;
+  transform: translateX(100%);
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.panel.is-open .panel__dialog {
+  transform: translateX(0);
+}
+.panel__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.panel__close:hover {
+  background: rgba(46, 42, 36, 0.08);
+  color: var(--ink);
+}
+.panel__close:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 2px;
+}
+.panel__title {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-weight: 600;
+  color: var(--ink);
+}
+.panel__subtitle {
+  margin: 1.8rem 0 0.7rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.panel__p {
+  margin: 0 0 0.9em;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.panel__facts {
+  margin: 1.4rem 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid rgba(46, 42, 36, 0.14);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+}
+.panel__facts dt {
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.panel__facts dd {
+  margin: 0.1em 0 0.9em;
+  font-size: var(--step-0);
+  font-weight: 600;
+  color: var(--ink);
+}
+.panel__sources {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+.panel__sources li {
+  margin-bottom: 0.8em;
+  padding-left: 0.9em;
+  border-left: 2px solid var(--mustard);
+}
+.panel__sources a {
+  color: var(--ink);
+  text-decoration-color: rgba(46, 42, 36, 0.35);
+  text-underline-offset: 2px;
+}
+.panel__sources a:hover {
+  color: var(--terracotta);
+}
+.panel__cite {
+  color: var(--ink-soft);
+}
+
+/* The drawer is modal: freeze the scrubbed story behind it, or frames animate
+   unseen and land somewhere unrelated when the drawer closes. */
+body.is-panel-open {
+  overflow: hidden;
+}
+
+/* The inline term that opens the drawer - the word itself is the affordance. */
+.panel-trigger {
+  position: absolute;
+  left: var(--trigger-left, 50%);
+  top: var(--trigger-top, 62%);
+  transform: translate(-50%, -50%);
+  z-index: 7;
+  pointer-events: auto;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--terracotta);
+  background: transparent;
+  border: 0;
+  padding: 0.3em 0.2em;
+  cursor: pointer;
+}
+.panel-trigger span {
+  border-bottom: 2px dotted var(--terracotta);
+  padding-bottom: 2px;
+}
+.panel-trigger::after {
+  content: '?';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15em;
+  height: 1.15em;
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  color: var(--paper);
+  background: var(--terracotta);
+  border-radius: 50%;
+}
+/* Scene 10's earned term: this is the typographic beat the whole chart builds
+   to, so it carries the weight the old in-SVG term used to. Its position lives
+   here rather than in the frame - see the media query below. */
+.panel-trigger--term {
+  --trigger-top: 68%; /* the clear band between the chart's axis and the caption */
+  font-family: var(--font-sans);
+  font-size: var(--step-2);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.panel-trigger--term::after {
+  font-size: 0.42em;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+}
+
+/* The band between the chart and the caption closes up as the viewport gets
+   shorter, and the two-voice narration is what grows into it. Rather than let
+   the term collide, move it ABOVE the chart into the empty sky the frame always
+   has up there, and shrink it so it reads as a label rather than a headline.
+   The two cases need different values - a portrait phone letterboxes the chart
+   low in the stage, while a short desktop pushes it right up under the HUD. */
+@media (max-aspect-ratio: 1/1) {
+  .panel-trigger--term {
+    --trigger-top: 26%;
+    font-size: var(--step-1);
+  }
+}
+@media (min-aspect-ratio: 1/1) and (max-height: 700px) {
+  .panel-trigger--term {
+    --trigger-top: 14%;
+    font-size: var(--step-1);
+  }
+}
+.panel-trigger:hover span {
+  border-bottom-style: solid;
+}
+.panel-trigger:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Invisible DOM button laid over a piece of SVG art (engine/hit.js). The art
+   underneath does the visual reacting - see .bird-card.is-hot. */
+.hit {
+  position: absolute;
+  z-index: 6;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.hit:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 3px;
+}
+
+/* The card lifts when its hit target is hovered or focused. Cheap transform-only
+   hover; the reveal animation owns opacity/translate, so this only touches
+   filter to avoid fighting GSAP for the transform. */
+.bird-card {
+  transition: filter 0.2s ease;
+}
+.bird-card.is-hot {
+  filter: brightness(1.05) drop-shadow(0 6px 14px rgba(46, 42, 36, 0.28));
+}
+
+/* --------------------------------------------------------------------------
+   Calendar - Scene 11's lay-date decision (components/calendar.js).
+   -------------------------------------------------------------------------- */
+.calendar {
+  position: absolute;
+  left: 50%;
+  bottom: 10vh;
+  transform: translateX(-50%);
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  width: min(94vw, 46rem);
+}
+.calendar.is-done {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.calendar__q {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  color: var(--ink);
+  text-align: center;
+  text-wrap: balance;
+}
+.calendar__strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.calendar__day {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+  min-width: 3.6rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid rgba(46, 42, 36, 0.2);
+  border-radius: 10px;
+  padding: 0.5em 0.6em;
+  cursor: pointer;
+  box-shadow: var(--shadow-paper-soft);
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+}
+.calendar__day span {
+  font-size: var(--step-0);
+  font-weight: 600;
+}
+.calendar__day small {
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.calendar__day:hover:not(:disabled) {
+  background: #fff;
+  transform: translateY(-2px);
+}
+.calendar__day:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 2px;
+}
+.calendar__day:disabled {
+  cursor: default;
+}
+.calendar__day.is-chosen {
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+  background: #fff;
+}
+
+/* End-of-frame curiosity cue (subtle scroll hint) */
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 3.5vh;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  opacity: 0.7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  z-index: 5;
+}
+.frame[data-mood='night'] .scroll-cue {
+  color: var(--sky-warm);
+}
+.scroll-cue__arrow {
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  animation: nudge 1.8s var(--ease-nature) infinite;
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: rotate(45deg) translate(0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: rotate(45deg) translate(3px, 3px);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   UI chrome - progress rail, act label, controls.
+   -------------------------------------------------------------------------- */
+.hud {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem;
+  pointer-events: none;
+}
+.hud__progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: transparent;
+  z-index: 41;
+}
+.hud__progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--sage), var(--mustard), var(--terracotta));
+  transition: width 0.1s linear;
+}
+.hud__act {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: rgba(244, 236, 216, 0.7);
+  padding: 0.3em 0.7em;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  transition: color 0.5s, background 0.5s;
+}
+.hud__spacer {
+  flex: 1;
+}
+.hud button {
+  pointer-events: auto;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--ink);
+  background: rgba(244, 236, 216, 0.8);
+  border: 1px solid rgba(46, 42, 36, 0.14);
+  border-radius: 999px;
+  padding: 0.35em 0.85em;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s, transform 0.15s;
+}
+.hud button:hover {
+  background: var(--paper);
+  transform: translateY(-1px);
+}
+.hud button:focus-visible {
+  outline: 2px solid var(--slate-blue);
+  outline-offset: 2px;
+}
+
+/* Intro title overlay */
+.intro-title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  z-index: 6;
+  padding: 2rem;
+}
+.intro-title h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-style: italic;
+  font-size: var(--step-3);
+  line-height: 1.05;
+  color: var(--paper);
+  opacity: 0;
+}
+.intro-title p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  letter-spacing: 0.05em;
+  color: var(--sky-warm);
+  opacity: 0;
+}
+
+.noscript {
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+  font-family: var(--font-serif);
+  line-height: 1.6;
+}
+
+/* Debug: ?nolabels hides all text for the "Memory Test".
+   Every new text overlay must be listed here, or it leaks into the test and
+   the frame gets credit for a story its animation isn't actually telling. */
+body.nolabels .narration,
+body.nolabels .annotation,
+body.nolabels .big-term,
+body.nolabels .intro-title,
+body.nolabels .scroll-cue,
+body.nolabels .choice,
+body.nolabels .calendar,
+body.nolabels .panel-trigger,
+body.nolabels .panel,
+body.nolabels .hit {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion - collapse continuous/ambient loops.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue__arrow {
+    animation: none;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
