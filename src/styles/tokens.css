@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Design tokens - palette, type, motion grammar.
+   Palette derived from docs/reference-image/animation-helper.png (paper-cut).
+   ========================================================================== */
+
+:root {
+  /* --- Core paper-cut palette --- */
+  --cream: #efe6d0;
+  --cream-deep: #e6d9bd;
+  --paper: #f4ecd8;
+  --ink: #2e2a24;
+  --ink-soft: #554d3f;
+
+  --forest: #3f5e3a;
+  --sage: #6e8b4e;
+  --sage-light: #9db978;
+  --slate-blue: #5b7c99;
+  --slate-deep: #2e4a5e;
+  --sky: #a9c7dd;
+  --sky-warm: #cfe0e6;
+  --water: #6c93a6;
+  --terracotta: #b5482e;
+  --mustard: #e0a93b;
+  --bark: #7a5a3a;
+  --bark-deep: #5b4227;
+
+  /* Willow the Tree Swallow - iridescent blue-green back, white belly */
+  --willow-back: #3a6ea5;
+  --willow-back-2: #2b5a80;
+  --willow-belly: #f6f1e4;
+  --willow-beak: #201d18;
+
+  /* --- Legend (matches reference image chips) --- */
+  --stays: #4c7a34;
+  --uncertain: #e4b33d;
+  --declines: #c0392b;
+  --arrives: #2e6da4;
+
+  /* --- Night (Act I frame 1) --- */
+  --night: #10131a;
+  --night-2: #1c2430;
+
+  /* --- Type --- */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --step--1: clamp(0.82rem, 0.78rem + 0.2vw, 0.95rem);
+  --step-0: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
+  --step-1: clamp(1.3rem, 1.1rem + 0.9vw, 1.85rem);
+  --step-2: clamp(1.7rem, 1.3rem + 1.9vw, 2.9rem);
+  --step-3: clamp(2.3rem, 1.6rem + 3.4vw, 4.6rem);
+  --step-4: clamp(3rem, 1.9rem + 5.4vw, 6.5rem);
+
+  /* --- Motion grammar (see docs/direction.md "Animation Language") --- */
+  --ease-nature: cubic-bezier(0.37, 0, 0.28, 1); /* organic, gentle */
+  --ease-positive: cubic-bezier(0.16, 1, 0.3, 1); /* rising, hopeful */
+  --ease-negative: cubic-bezier(0.5, 0, 0.75, 0); /* sinking, heavy */
+  --ease-human: cubic-bezier(0.65, 0, 0.35, 1); /* structured */
+
+  --dur-quick: 0.4s;
+  --dur-base: 0.9s;
+  --dur-slow: 1.8s;
+
+  --shadow-paper: 0 6px 14px rgba(46, 42, 36, 0.22);
+  --shadow-paper-soft: 0 3px 8px rgba(46, 42, 36, 0.16);
+  --maxw: 1200px;
+}

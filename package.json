@@ -1,0 +1,21 @@
+{
+  "name": "willow-story",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "One Bird's Story. Toronto's Future. - an animated scrollytelling documentary about Willow the Tree Swallow.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "@fontsource/fraunces": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "gsap": "^3.13.0",
+    "lenis": "^1.1.13"
+  }
+}

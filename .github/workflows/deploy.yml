@@ -1,0 +1,75 @@
+# Build the scrollytelling piece and publish it to GitHub Pages.
+#
+# Runs on every push to main, and on demand from the Actions tab.
+#
+# vite.config.js sets `base: './'`, so the built asset URLs are relative: the
+# repo name is not baked in anywhere, and moving the site to a custom domain or
+# to a user page needs no config change.
+#
+# SETUP, needed once per repository: Settings -> Pages -> Source must be
+# "GitHub Actions". If it is set to "Deploy from a branch" instead, the build
+# job passes and the deploy job fails with
+#
+#   Branch "main" is not allowed to deploy to github-pages due to environment
+#   protection rules.
+#
+# which is the branch source pinning the github-pages environment to its own
+# branch rather than anything wrong with the build.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# The least the deploy needs: read the repo, write a Pages deployment, and mint
+# the OIDC token that actions/deploy-pages authenticates with. Note there is no
+# `contents: write` here - nothing pushes a branch, so the build output never
+# enters git history.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. `cancel-in-progress: false` on purpose: cancelling a
+# half-finished Pages deployment can leave the live site in a partial state, and
+# these builds take about a minute.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      # `npm ci` rather than `npm install`: the lockfile is committed, and a
+      # deploy should build the versions that were tested, not resolve new ones.
+      - run: npm ci
+
+      # The project's only automated check. There is no test suite and no
+      # linter (see CLAUDE.md), so a green build here means imports and syntax
+      # are sound and nothing more - visual regressions still need a human.
+      - run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
