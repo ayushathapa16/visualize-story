@@ -24,7 +24,7 @@ Every paper and dataset this piece stands on, with what each one can actually gi
 
 ---
 
-## 0. THE SOURCE — Scenes 19, 20 and 21 all come from this one
+## 0. THE SOURCE — Scenes 29, 30 and 31 all come from this one
 
 ✅ **verified** — read in full 2026-07-26, and every number below was recomputed from its
 published data by `scripts/build-data.py` on that date.
@@ -45,9 +45,9 @@ CMIP6 ensemble.
 | We need | It has |
 |---|---|
 | Toronto | One of the cities. 20×20 km quadrat, **888** modelled species. |
-| Scene 19's chart | **Fig 1** — gains and losses per city, by SSP. Toronto: **159–360 gained, 40–195 lost**; the text calls it "22% species loss and 41% species gained". |
-| Scene 20's chart | 354 modelled Toronto birds (`Class == Aves`), suitability at 3 time points × 3 SSPs. |
-| Scene 21's chart | The IUCN Red List assessments bundled in the repo under `data/IUCN/`. |
+| Scene 29's chart | **Fig 1** — gains and losses per city, by SSP. Toronto: **159–360 gained, 40–195 lost**; the text calls it "22% species loss and 41% species gained". |
+| Scene 30's chart | 354 modelled Toronto birds (`Class == Aves`), suitability at 3 time points × 3 SSPs. |
+| Scene 31's chart | The IUCN Red List assessments bundled in the repo under `data/IUCN/`. |
 | The 2081 endpoint | Its future window is literally 2081–2100. |
 | Toronto temperature | ClimateNA mean annual temperature: **8.06 °C now → 11.04 °C (SSP1-2.6) or 16.32 °C (SSP5-8.5)** by 2081–2100. |
 
@@ -93,7 +93,7 @@ Dark-eyed Junco, Red-bellied Woodpecker and Northern Mockingbird. Don't put them
 - **Presence threshold:** the paper's per-species MaxEnt threshold is not in the repo, so our
   species-count charts use a **0.5 cut of our own**. Headline numbers come from the paper's own
   table (888 / 159 / 40 / 360 / 195), never from our cut.
-- **`AppendixTable2.csv` has 56 cities, not the 60 the paper models.** Scene 19's chart says 56.
+- **`AppendixTable2.csv` has 56 cities, not the 60 the paper models.** Scene 29's chart says 56.
 - **The published data contradicts itself on the middle scenario:** `climateProjections.csv`
   models `ssp370`, while `AppendixTable2.csv` and Fig 1 report `ssp245`. We don't reconcile them
   — each chart is keyed to whatever its own source file says.
@@ -104,7 +104,7 @@ fires, the upstream data moved — stop and re-verify. Do not relax the assert.
 
 ---
 
-## 0b. The IUCN layer — Scene 21
+## 0b. The IUCN layer — Scene 31
 
 ✅ **verified** — computed from `data/IUCNspeciesList.csv` and `data/IUCN/assessments.csv` in the
 repo above, 2026-07-26.
@@ -148,7 +148,7 @@ Tree Swallow. Anything about *where* these birds live is IUCN's claim, and the l
 
 ---
 
-## C. Range shift — Scene 17
+## C. Range shift — Scene 27
 
 ✅ **verified** for the national figures below (they appear in plain text on the page);
 ⚠️ **unread** for anything province-level.
@@ -157,7 +157,7 @@ Tree Swallow. Anything about *where* these birds live is IUCN's claim, and the l
 https://www.audubon.org/climate/survivalbydegrees
 Ontario page: https://www.audubon.org/climate/survivalbydegrees/state/ca/on
 
-These four are on screen in Scene 17 and live in `SCENARIOS` in `src/components/climate.js`:
+These four are on screen in Scene 27 and live in `SCENARIOS` in `src/components/climate.js`:
 
 - **389 of 604** North American species vulnerable at **+3 °C**
 - **76%** of vulnerable species are better off at **+1.5 °C**
@@ -169,16 +169,16 @@ These four are on screen in Scene 17 and live in `SCENARIOS` in `src/components/
 
 **Ontario's own numbers are not quotable.** The province page serves its figures through an
 interactive widget that is not scrapeable — re-confirmed 2026-07-26, the fetch returns no
-numbers at all. That is why the Scene 17 bird cards carry no Audubon statistic on their face.
+numbers at all. That is why the Scene 27 bird cards carry no Audubon statistic on their face.
 
 ---
 
-## B. Migration phenology — Scene 10's argument
+## B. Migration phenology — Scene 20's argument
 
-Scene 10's phenological-mismatch argument is **not** supported by the Filazzola paper — do not
+Scene 20's phenological-mismatch argument is **not** supported by the Filazzola paper — do not
 attach its numbers to that scene. One paper here has now been read; the rest have not.
 
-### B1. The one that has been read — Scene 10's drawer
+### B1. The one that has been read — Scene 20's drawer
 
 ✅ **verified** — read in full 2026-07-27.
 
@@ -198,7 +198,7 @@ Open access: https://pmc.ncbi.nlm.nih.gov/articles/PMC5432526/
 
 - **It is green-up, not insects.** The authors state plainly that green-up "is not a direct
   measure of food availability", and note it has not been established whether edible arthropod
-  biomass generally declines later in spring. Scene 10 animates insect peak vs chick demand.
+  biomass generally declines later in spring. Scene 20 animates insect peak vs chick demand.
   Same mechanism, **different measurement** — never let the label drift into the second one.
 - **Tree Swallow is not in it.** It is 48 songbird species and Willow's is not among the
   results. Do not imply the figure is hers.
@@ -225,14 +225,14 @@ mortality in tree swallows (*Tachycineta bicolor*)." *Oecologia* 173: 129–138.
 DOI: https://doi.org/10.1007/s00442-013-2605-z
 
 This is **Tree Swallows, insect food supply and chick mortality in one paper** — the exact
-combination Scenes 6, 10, 13 and 14 all lean on and none of them can currently cite. Springer
+combination Scenes 11, 20, 23 and 24 all lean on and none of them can currently cite. Springer
 redirects to an auth wall (checked 2026-07-27), so it needs library access rather than a
 fetch. **Highest-value unread source in this file.** It may also be the real paper behind the
 quarantined Long Point claim in section E.
 
 ---
 
-## F. Tree Swallow phenology — Scenes 6, 8, 10, 11, 12 and 14
+## F. Tree Swallow phenology — Scenes 11, 13, 20, 21, 22 and 24
 
 **This section is why the emotional half of the piece is no longer uncited.** Every earlier pass
 searched the *phenology* literature (green-up vs arrival, §B) and concluded that nothing in it
@@ -263,7 +263,7 @@ Open access: https://pmc.ncbi.nlm.nih.gov/articles/PMC3751296/
 | Scope | Tompkins County (Ithaca), New York. Swallows 1986–2011; daily insect sampling from 1989. 2,361 chicks from 554 nests; brood-level analysis over 2,261 nests. |
 
 **What it does not give us:** no provisioning rate. It does not say how many insects a brood eats
-in a day, and Scene 6 no longer claims one.
+in a day, and Scene 11 no longer claims one.
 
 ### F2. Shipley et al. 2020 — the trap that earlier laying walks into
 
@@ -277,10 +277,10 @@ DOI: https://doi.org/10.1073/pnas.2009864117
 
 | We need | It has |
 |---|---|
-| Scene 8's trend | Tree swallows have advanced egg laying by **~3 days per decade**, and in New York **by ~13 days from 1972 to 2015** (F₁,₃₆ = 28.1, P < 0.001, adj. R² = 0.42). |
+| Scene 13's trend | Tree swallows have advanced egg laying by **~3 days per decade**, and in New York **by ~13 days from 1972 to 2015** (F₁,₃₆ = 28.1, P < 0.001, adj. R² = 0.42). |
 | Observed spring warming | Mean *annual* temperature at Ithaca rose only **0.51 °C** (1989–2015 vs 1963–1988) - but during **May to early June, when the swallows lay, it rose 1.9 °C**, nearly fourfold. |
-| Scene 11's trade-off | The cost of laying early. Nestlings hatched since 2011 run **nearly twice** the risk of meeting a cold snap as those hatched in the 1970s - **11.5% → 19.6%**, once every ten years becoming once every five. |
-| Scene 12's cold snap | Below **18.5 °C** fewer chicks fledge; a 3 °C drop from **18.5 to 15.5 °C halves** the number fledged. Even a **1–2 day** event below 18.5 °C can cut offspring survival by **more than 50%**. |
+| Scene 21's trade-off | The cost of laying early. Nestlings hatched since 2011 run **nearly twice** the risk of meeting a cold snap as those hatched in the 1970s - **11.5% → 19.6%**, once every ten years becoming once every five. |
+| Scene 22's cold snap | Below **18.5 °C** fewer chicks fledge; a 3 °C drop from **18.5 to 15.5 °C halves** the number fledged. Even a **1–2 day** event below 18.5 °C can cut offspring survival by **more than 50%**. |
 | What a mistimed spring costs | Nests hatching *after* the year's last cold snap fledge **3.78 ± 0.50** chicks; those hatching before it, **2.67 ± 0.43** - about one chick. Complete nest failures rose from **15.8% to 33.2%** (1989→2015). On and around 9 June 2016, **71% of all nests failed completely** as the daytime maximum fell to 14.3 °C. |
 | Scope | Two sites <35 km apart near Ithaca, New York, **43 years, 1972–2015**; **11,236 chicks from 2,041 nests**; daily aerial-insect biomass 1989–2014. |
 
@@ -321,8 +321,8 @@ e2607714123.** DOI: https://doi.org/10.1073/pnas.2607714123
 | We need | Reported |
 |---|---|
 | Ontario, this species | **Long Point Bird Observatory, southern Ontario.** Tree swallow records **1969–2024**; insect data **1977–2011**. |
-| Scene 14's claim | Insect biomass fell **62%** between 1977 and 2011. |
-| Scene 10's claim | The gap between tree swallow breeding and peak insect emergence has widened by **more than 3 days per decade since 1977**. |
+| Scene 24's claim | Insect biomass fell **62%** between 1977 and 2011. |
+| Scene 20's claim | The gap between tree swallow breeding and peak insect emergence has widened by **more than 3 days per decade since 1977**. |
 | Consequence | Nestlings lighter and fewer young produced in low-insect years; adults smaller as insect availability fell. No percentage is given for either in the coverage. |
 
 #### A second secondary account, and it does not agree with the first
@@ -337,7 +337,7 @@ https://www.birdscanada.org/55-years-of-tree-swallow-monitoring-sheds-light-on-t
 Michigan release says **62% between 1977 and 2011**. Same paper, two secondary accounts, two
 numbers — and nobody here can open the paper to see which one it says.
 
-**How this is handled, and why:** Scene 14 keeps **62%** and keeps its window on its face
+**How this is handled, and why:** Scene 24 keeps **62%** and keeps its window on its face
 (`1977-2011`), because that is the more specific of the two claims and it is the one whose scope we
 can state. The 50%/50-year figure is recorded here so the disagreement is visible, and is **not**
 averaged with the other — the same policy §0 applies to the paper's own ssp245/ssp370 contradiction.
@@ -383,7 +383,7 @@ Ottawa.** Chapter 4, Table 4.1 (observed change in temperature, 1948–2016).
 
 This is what `thermometer.js` had been missing. Its `SCALE_OBSERVED` shipped **numberless** from
 2026-07-27 because the "+1 °C / +2 °C" it used to print had no source anywhere in the repo. The
-spring figure is the right one for Scene 8: the frame is about spring arriving early, and the
+spring figure is the right one for Scene 13: the frame is about spring arriving early, and the
 annual mean is not what moved the lay dates.
 
 **Not to be called a Toronto figure.** It is provincial, and it is an observed trend to 2016, not
@@ -399,7 +399,7 @@ Helft L, Parr M, Marra PP (2019). "Decline of the North American avifauna." *Sci
 
 | We need | It has |
 |---|---|
-| Scene 18's claim, "one of many" | Net loss of **2.9 billion** breeding birds (95% CI 2.7–3.1 bn), **−29%** (95% CI 27–30%) of 1970 abundance, 1970–2017 |
+| Scene 28's claim, "one of many" | Net loss of **2.9 billion** breeding birds (95% CI 2.7–3.1 bn), **−29%** (95% CI 27–30%) of 1970 abundance, 1970–2017 |
 | **Willow's own guild** | **Aerial insectivores: 26 species, −156.8 million birds, −31.8%** (95% CI −36.4 to −26.1); **73.1%** of those species declining |
 | Scope | **529 species**, 76% of the breeding avifauna of the continental US and Canada; Breeding Bird Survey and other standardized surveys |
 | Independent corroboration | NEXRAD radar: nocturnal migratory biomass passage down **13.6 ± 9.1%** since 2007 |
@@ -452,12 +452,12 @@ reveals declines in terrestrial but increases in freshwater insect abundances." 
 | The caveat the authors lead with | "considerable variation in trends even among adjacent sites"; their estimate is **6-fold smaller** than the high-profile case studies that started the insect-decline alarm |
 | The counter-finding | **Freshwater** insects *increased* **+11.33% per decade** |
 
-**Why it is on Scene 14 and not somewhere louder:** it makes the Long Point number smaller, not
+**Why it is on Scene 24 and not somewhere louder:** it makes the Long Point number smaller, not
 bigger, and that is the point. A −62% site figure standing alone reads as the global rate; beside
 −8.8%/decade it reads as what it is, one place. Using a source that *weakens* a claim already on
 screen is the cheapest honesty this project can buy.
 
-**The freshwater result is deliberately not used to soften Scene 23's wetland action.** "Midges
+**The freshwater result is deliberately not used to soften Scene 33's wetland action.** "Midges
 and mayflies come off water" is a mechanism claim, and a global freshwater abundance trend is not
 evidence that a Toronto wetland restoration produces swallow food.
 
@@ -477,7 +477,7 @@ DOI: https://doi.org/10.1073/pnas.1809259115
 | The authors' own framing | Nonnative-landscaped properties "function as population sinks for insectivorous birds" |
 
 **Not a Tree Swallow, not Toronto, and not an aerial insectivore** — a resident, foliage-gleaning
-bird whose chicks eat caterpillars, not flying insects. Scene 22's label says Carolina Chickadee
+bird whose chicks eat caterpillars, not flying insects. Scene 32's label says Carolina Chickadee
 and says Washington DC. It is evidence that the native-plant → insect → bird chain has been
 measured end to end in a residential yard; it is not evidence about Willow's own food supply.
 
@@ -492,11 +492,11 @@ measured end to end in a residential yard; it is not evidence about Willow's own
   Act V. **Parked here on purpose, not overlooked.**
 - **Simons et al. (2025). "Radar revelations: insect availability influences parental provisioning
   in breeding tree swallows." *J. Avian Biol.* e03333** — ⚠️ **lead only**, returns **402 Payment
-  Required** (checked 2026-07-27). Would be the provisioning-rate source Scene 6 and Scene 7 both
+  Required** (checked 2026-07-27). Would be the provisioning-rate source Scene 11 and Scene 12 both
   lack. Not cited.
 - **Popular provisioning figures** ("6,000–7,000 insects a day", "10–20 deliveries an hour") appear
   on hobbyist nest-box sites with no citation attached. **Not on the site**, for the same reason
-  the same claim was cut from Scene 6 in the first place.
+  the same claim was cut from Scene 11 in the first place.
 
 ---
 

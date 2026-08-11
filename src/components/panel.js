@@ -1,8 +1,8 @@
 // ============================================================================
 // panel.js - a side drawer for the material that doesn't belong on the stage.
 //
-// The story shows; the panel explains. Scene 10 uses it for the phenological
-// mismatch definition and its papers, Scene 17 for a species' outlook. Anything
+// The story shows; the panel explains. Scene 20 uses it for the phenological
+// mismatch definition and its papers, Scene 27 for a species' outlook. Anything
 // in here is opt-in by definition - if a viewer never opens it, the scene must
 // still land. That is why nothing load-bearing goes inside.
 //

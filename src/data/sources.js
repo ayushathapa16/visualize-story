@@ -51,14 +51,14 @@ export const IUCN = {
 };
 
 /**
- * Scene 17's aggregate claim. Kept here so every citation in the piece is in one
+ * Scene 27's aggregate claim. Kept here so every citation in the piece is in one
  * file, but the FIGURES themselves stay in SCENARIOS (components/climate.js) -
  * one home per number.
  */
 export const AUDUBON = {
   title: 'Survival by Degrees: 389 Bird Species on the Brink',
   authors: 'National Audubon Society',
-  // The on-stage form. Scene 17's evidence box is a narrow column beside the
+  // The on-stage form. Scene 27's evidence box is a narrow column beside the
   // card grid, and the full name plus subtitle wraps it onto an extra line -
   // which pushes its foot into the caption band on a short viewport. `short`
   // and the pre-colon title together fit one line and still attribute it.
@@ -68,9 +68,9 @@ export const AUDUBON = {
 };
 
 /**
- * Scene 10 - the "Phenological Mismatch" drawer.
+ * Scene 20 - the "Phenological Mismatch" drawer.
  *
- * The prose is deliberately careful, and matches what Scene 10 animates: the
+ * The prose is deliberately careful, and matches what Scene 20 animates: the
  * chicks still hatch while insects are around, but the *peak* has moved past
  * them. That is a weaker and more accurate claim than "the overlap disappears".
  */
@@ -81,7 +81,7 @@ export const MISMATCH = {
     'Warming pulls some of them forward faster than others. Insects respond quickly to local temperature; a long-distance migrant like a Tree Swallow is still thousands of kilometres away, reading cues that have not changed as much. She cannot simply leave earlier.',
     'The result is not usually a clean miss. The chicks hatch, and there are insects. But the <em>peak</em> - the few days of abundance that a brood of hungry chicks is built around - has already passed. A mismatch is a matter of degree, and the degree is what decides how many chicks fledge.',
     // The honesty paragraph, and it is why this drawer took so long to fill.
-    // The measured evidence below is about GREEN-UP and ARRIVAL. Scene 10
+    // The measured evidence below is about GREEN-UP and ARRIVAL. Scene 20
     // animates INSECT PEAK against CHICK DEMAND. Those are the same mechanism
     // but not the same measurement, and the reader is told so rather than being
     // left to assume the figure is Willow's.
@@ -171,7 +171,7 @@ function speciesFacts(name) {
 }
 
 /**
- * Scene 17 - the birds of Toronto.
+ * Scene 27 - the birds of Toronto.
  *
  * `outlook` is DIRECTIONAL only ('contracts' | 'shifts-north' | 'stable' |
  * 'mixed') and is used to drive the card's illustration, never printed as a
@@ -236,7 +236,7 @@ export function speciesByName(name) {
 }
 
 /**
- * Scene 23 - what actually helps. Each is an action a person in Toronto can
+ * Scene 33 - what actually helps. Each is an action a person in Toronto can
  * take; the claim attached to each is mechanistic (it produces insects, or
  * habitat), not a quantified outcome.
  *
@@ -252,7 +252,7 @@ export const ACTIONS = [
   {
     id: 'native',
     title: 'Plant native',
-    // PLAIN TEXT, AND SHORT. frame23.js renders these as SVG <text>, wraps them
+    // PLAIN TEXT, AND SHORT. frame33.js renders these as SVG <text>, wraps them
     // by hand at ~46 characters and then renders `lines.slice(0, 3)` - anything
     // past three lines is silently dropped, and any HTML tag prints literally.
     // That is why the threshold is here and its citation is not: the citation

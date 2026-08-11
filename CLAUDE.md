@@ -8,8 +8,8 @@ An animated **scrollytelling documentary** - "One Bird's Story. Toronto's Future
 a Tree Swallow, and how a warming climate pulls Toronto's spring out of sync with the birds that
 depend on it. Vanilla JS + Vite + GSAP + Lenis. No framework, no tests, no linter.
 
-All 24 scenes (Acts I–VII) are built and registered in `src/frames/registry.js`. **Scene number ==
-file number**: Scene 7 is `frame07.js`. Keep it that way - the moment they drift, every note in the
+All 34 scenes (Acts I–VII) are built and registered in `src/frames/registry.js`. **Scene number ==
+file number**: Scene 12 is `frame12.js`. Keep it that way - the moment they drift, every note in the
 script points at the wrong file.
 
 **Everything the story asserts lives in `src/data/sources.js`** (prose and citations),
@@ -22,15 +22,15 @@ number or a citation. `torontoBirds.js` is **generated** - see "The data" below;
 
 The piece has two registers, and confusing them is the one unrecoverable mistake here.
 
-**The register is no longer positional.** It used to be: Scenes 19–21 were evidence and everything
-else was illustration. As of 2026-07-28 **seventeen** scenes are evidence-backed — 2, 6, 8, 10, 11,
-12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 — first because the tree swallow phenology literature
+**The register is no longer positional.** It used to be: Scenes 29–31 were evidence and everything
+else was illustration. As of 2026-07-28 **seventeen** scenes are evidence-backed — 2, 11, 13, 20,
+21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 — first because the tree swallow phenology literature
 turned out to have papers about this exact species and mechanism (`docs/sources.md` §F), and then
 because the scenes at the two ends of the piece got sources of their own (§G). So you can no longer
 tell which register you are in from the scene number.
 
-The scenes still carrying no figure are 1, 3, 4, 5, 7, 9 and 24, and that is a list of **open
-gaps**, not a design. Each one asserts something ordinary about tree swallow life history - cavity
+The scenes still carrying no figure are 1, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 18, 19 and
+34, and that is a list of **open gaps**, not a design. Each one asserts something ordinary about tree swallow life history - cavity
 nesting, clutch size, nestling growth, migration cues - that is certainly true and that nobody here
 has read a paper for. The nearest sources are paywalled (Birds of the World) or uncited hobbyist
 pages. If you find open-access sources for those, they belong on those frames.
@@ -38,14 +38,14 @@ pages. If you find open-access sources for those, they belong on those frames.
 **What tells you instead: is there a citation on the stage?**
 
 - **Illustrative art** teaches a shape and is never labelled with a number it can't support. The
-  Ontario range blobs, Scene 10's abundance curves, Scene 9's timeline bars, Scene 16's flock.
+  Ontario range blobs, Scene 20's abundance curves, Scene 19's timeline bars, Scene 26's flock.
 - **Evidence** is any figure a reader can read, and it carries `sourceNote()` from
   `components/chart.js` **on the stage** — not in a drawer. A number on screen without a visible
   source is a bug.
 
-The two can now share a frame, and several do: Scene 12's cold snap is illustrative art carrying a
+The two can now share a frame, and several do: Scene 22's cold snap is illustrative art carrying a
 cited claim about the mechanism it depicts. That is allowed. What is not allowed is letting a
-citation next to a picture imply the picture is data — Scene 10 cites how fast the gap is widening
+citation next to a picture imply the picture is data — Scene 20 cites how fast the gap is widening
 and still must never label its curves with an axis, because nobody has published that curve.
 
 **Where the figures live.** Three data modules, and none is optional:
@@ -63,8 +63,8 @@ and still must never label its curves with an axis, because nobody has published
   they reach for a figure. Its scopes are the widest in the project (a province, a continent, the
   world, a suburb of Washington DC), so its labels do the most work.
 
-**One figure in the piece is `secondary`** — Probst et al. 2026's Long Point numbers (Scenes 10 and
-14). PNAS is paywalled; the figures come from the press release and nobody here has read the paper.
+**One figure in the piece is `secondary`** — Probst et al. 2026's Long Point numbers (Scenes 20 and
+24). PNAS is paywalled; the figures come from the press release and nobody here has read the paper.
 That was a deliberate call, recorded under the 🟡 tag in `docs/sources.md`. It is not a precedent.
 If you get institutional access, read it and either promote it or correct what is on screen.
 
@@ -72,7 +72,7 @@ If you get institutional access, read it and either promote it or correct what i
 of it is a Toronto measurement, and every label on screen says where it was taken. Do not drop the
 scope to make a line fit.
 
-Scene 17 carries the Audubon claim (+1.5 °C / +3.0 °C warming scenarios). Those continental figures
+Scene 27 carries the Audubon claim (+1.5 °C / +3.0 °C warming scenarios). Those continental figures
 live in one place - `SCENARIOS` in `src/components/climate.js` - and the Ontario map geometry is
 *illustrative*, not a projection. **Audubon's Ontario numbers remain unquotable**: they sit behind a
 widget that isn't scrapeable (re-confirmed 2026-07), so no card shows an Audubon statistic.
@@ -82,10 +82,10 @@ that are actually in it. **Tree Swallow, Common Loon and Barn Swallow are not mo
 (dropped by the paper's AUC < 0.70 filter), so their cards say exactly that instead of showing a
 number. Willow's own card has no figure, and that is correct. Don't substitute a congener.
 
-Scene 10 makes the one scientific argument, and it is weaker than it looks: the chicks still hatch
+Scene 20 makes the one scientific argument, and it is weaker than it looks: the chicks still hatch
 while insects are around, they just miss the **peak**. That is why the insect row is an abundance
 *curve* and not a bar - a bar could only say "present / absent", which would let the chart assert an
-empty sky. Don't simplify it back into a bar. **Scene 10's argument is not in the Filazzola paper**
+empty sky. Don't simplify it back into a bar. **Scene 20's argument is not in the Filazzola paper**
 - that paper is about species turnover, not phenology - so no figure of its ever goes in
 `MISMATCH`. Attaching its numbers there would be a citation that doesn't support its claim.
 
@@ -98,8 +98,8 @@ deleting a fact you can't stand behind costs nothing.
 
 ## The data
 
-Scenes 16 and 19–21 run on **Filazzola et al. 2024, PLOS ONE 19(3):e0299217** (CC BY 4.0) plus the
-IUCN Red List assessments bundled with it. Scenes 6, 8, 10, 11, 12 and 14 run on the tree swallow
+Scenes 26 and 29–31 run on **Filazzola et al. 2024, PLOS ONE 19(3):e0299217** (CC BY 4.0) plus the
+IUCN Red List assessments bundled with it. Scenes 11, 13, 20, 21, 22 and 24 run on the tree swallow
 phenology papers in `docs/sources.md` §F, via `src/data/phenology.js`. `docs/sources.md` is the
 record of what has actually been read, what has only been found, and what was taken from a press
 release; read it before citing anything.
@@ -119,10 +119,10 @@ Three things that must keep being said, because each one is easy to get wrong:
 2. **Suitability is not abundance.** Values are MaxEnt predicted occurrence (0–1). Not bird counts,
    not probabilities of seeing one.
 3. **The 0.5 presence cut is ours**, not the paper's - its own per-species threshold isn't
-   published. Headline numbers come from the paper's table; only shape comes from our cut. Scene 20
+   published. Headline numbers come from the paper's table; only shape comes from our cut. Scene 30
    says so on its face.
 
-The IUCN layer (Scene 21, and the status lines on the bird cards) is **IUCN's assessment, not a
+The IUCN layer (Scene 31, and the status lines on the bird cards) is **IUCN's assessment, not a
 finding of the paper**, and its labels say so. The paper's own caveat travels with it: at-risk
 species were *not* necessarily the ones most vulnerable to climate change.
 
@@ -152,7 +152,7 @@ drive the page in a real browser and look at it:
   (in-SVG text scales with the viewBox; narration is DOM text pinned to `bottom: 9vh`, so they
   converge on short viewports - and a frame's camera zoom magnifies the collision).
 
-**Two hard layout constraints, both learned the expensive way on Scenes 19–21 - and they now bind
+**Two hard layout constraints, both learned the expensive way on Scenes 29–31 - and they now bind
 the eight scenes that carry `sourceNote()` lines too:**
 
 - **Portrait shows only viewBox x ≈ 330–1270.** `base.css` scales the stage 1.7× on a portrait
@@ -186,11 +186,11 @@ src/
               calendar, panel, chart (real data - always with sourceNote())
   data/       sources.js     ← prose, per-species facts, every citation
               torontoBirds.js ← GENERATED by scripts/build-data.py - Filazzola figures
-              phenology.js   ← HAND-MAINTAINED - the tree swallow literature (Scenes 6-15)
-              context.js     ← HAND-MAINTAINED - everything not about Willow (2, 8, 14, 18, 22-23)
+              phenology.js   ← HAND-MAINTAINED - the tree swallow literature (Scenes 11-25)
+              context.js     ← HAND-MAINTAINED - everything not about Willow (2, 13, 19, 23, 27-28)
               coastlines.js  ← GENERATED: Natural Earth 1:50m, for globe.js
-  frames/     frame01…frame24 + registry.js
-  state.js    the reader's Scene 11 choice, read by Scene 12
+  frames/     frame01…frame34 + registry.js
+  state.js    the reader's Scene 21 choice, read by Scene 22
   ui/         progress (HUD)
   styles/     tokens.css, base.css
 ```
@@ -248,16 +248,31 @@ Rotation/scale are then exactly about the pivot, with no origin to get wrong.
 Willow recur. Per the direction guide, that familiarity is what builds attachment - don't fork a
 component to tweak one frame; parameterize it. The structural pairs the story is *built* on:
 
-- **Scene 1 ↔ Scene 24** - the same shoreline at dawn and dusk, sharing `parkLife` and the same
+- **Scene 1 ↔ Scene 34** - the same shoreline at dawn and dusk, sharing `parkLife` and the same
   camera path run in reverse. Move the park or the framing in one and you must move it in the other,
   or the ending stops landing.
-- **Scene 6 ↔ Scene 14** - the same nest, flight and golden light, with the abundance taken out.
-- **Scene 4 → 8 → 9** - one `gears.js` clock: working, running early, broken.
+- **Scene 11 ↔ Scene 24** - the same nest, flight and golden light, with the abundance taken out.
+- **Scenes 4-8 → Scene 9** - Willow walks the five stages of the year one per scene, each shown as
+  itself: a bloom, a swarm, a bird, four eggs, four mouths. **No machinery appears in that run** - a
+  first pass parked a gear in each frame and it read as a cog floating over a marsh. The tie is
+  Scene 9's `assembleFromIcons()` in `gears.js`: those same five icons fly in from off the ring and
+  only then grow gears underneath them. Put a gear back into 4-8 and the reveal has nothing left to
+  reveal.
+- **Scenes 14-18 ↔ Scenes 4-8** - the same five stages, the same marsh, the same shots, in a
+  warmer year. Willow is absent from 14 and 15 on purpose: the season starts without her and the
+  empty branch is the argument. The swarm in 15 and 18 settles at **0.45, never 0** - the sky is
+  past its peak, not empty, which is the only claim the literature supports. Change a composition
+  in 4-8 and its mirror has to move with it.
+- **Scenes 4-8 and 14-18 keep a high horizon (`GROUND = 640`) and camera scale ≤ 1.15.** Narration is pinned
+  to the bottom of the *screen*, so on a wide short window the foot of the stage is caption. The
+  bottom 260 viewBox units are flat colour on purpose; putting grass or flowers there is what broke
+  these frames the first time.
+- **Scene 9 → 13 → 19** - one `gears.js` clock: working, running early, broken.
 - **`nest.js`** is one component with a lifecycle (`buildTo` → `layEggs` → `hatch` → `setGrowth` →
-  `setEnergy`), across Scenes 3, 5, 7, 15 and 24. Not five nests.
+  `setEnergy`), across Scenes 3, 10, 12, 25 and 34. Not five nests.
 
 ## Audio
 
 Off by default and a graceful no-op when files are absent. Drop `wind.mp3`, `swallow-call.mp3`,
 `insects.mp3`, `rain.mp3` into `src/assets/audio/` and the HUD mute toggle picks them up. Silence is
-a deliberate storytelling cue - **Scene 15 stops every bed and adds none.** Don't fill it.
+a deliberate storytelling cue - **Scene 25 stops every bed and adds none.** Don't fill it.

@@ -1,103 +1,80 @@
-// Scene 18 - One Bird's Story. Beat: REFLECTION→HOPE. "So what do we do?"
+// Scene 18 - The Mouths Open Late. Beat: UNEASE→CONFUSION. "Then what breaks?"
 //
-// The exact inverse of Scene 16: that scene pulled out from her nest until it
-// was one of hundreds, and this one comes all the way back down to it. After an
-// act of aggregates, the story remembers it is about one bird.
+// Last of five (see frame14.js), and Scene 8 run again in a worse year. Same
+// nest, same hatch, same single feeding trip out and back. What differs is what
+// the sky has in it and what she brings home: Scene 8 ended with the brood at
+// 0.95 energy, this one ends at 0.6, and the difference is the whole run.
 //
-// She has one chick left. The story does not soften that, and it does not
-// linger on it either - the chick is about to fly.
+// The chicks are not starving and the sky is not empty. They are past the peak.
+// Keep the swarm at the level Scene 15 left it and the brood short rather than
+// failing - the failures belong to Scenes 20-22, where the figures are.
 //
-// "One of many" was the one sentence in Act VI making a continental claim with
-// nothing behind it - the act's whole thesis, unsourced, while the two scenes
-// on either side of it carried citations. It now carries Rosenberg et al. 2019,
-// and specifically that paper's AERIAL INSECTIVORE row: 26 species, Willow's
-// own functional group, measured. The 2.9 billion headline is the better-known
-// number and it is here too, but the guild figure is the one that is about her.
-import { sourceNote } from '../components/chart.js';
-import { FIGURES, citeFigure } from '../data/context.js';
+// This hands straight to Scene 19: the reader has now watched all five links
+// slip, so the clock can break over something they have seen.
+import { rect } from '../engine/svg.js';
+import { swarm } from '../components/insects.js';
 import { nest } from '../components/nest.js';
-import { toronto } from '../components/toronto.js';
-import { flock } from '../components/flock.js';
+import { tree, reeds } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { gsap } from '../engine/gsap.js';
 import { revealText } from '../engine/reveal.js';
 import { stillness } from '../engine/motion.js';
 
 export default {
-  id: 's18-one-birds-story',
-  title: "One Bird's Story",
-  act: 'VI',
+  id: 's18-mouths-open-late',
+  title: 'The Mouths Open Late',
+  act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, overlay, tl, narrate, camera } = ctx;
+    const { scene, W, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#cfe0e6');
+    // Scene 8's warm light, gone a little thin.
+    ctx.backdrop('#e6ddc4');
 
-    const city = toronto({ wetlandFront: true });
-    scene.appendChild(city.node);
+    const GROUND = 640;
+    scene.appendChild(rect(-600, GROUND, W + 1200, 900, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 280, y: GROUND + 20, s: 1.5, green: '#4f7040' }).node);
+    scene.appendChild(reeds({ x: 1400, y: GROUND, s: 1.3 }).node);
 
-    // The city full of other birds - where Scene 17 left us.
-    const others = flock({ cx: 800, cy: 300, spreadX: 700, spreadY: 220, count: 24 });
-    scene.appendChild(others.node);
-    others.showUpTo(24, 0.01);
+    // Scene 8 had this full. Same swarm, same place, past its peak.
+    const bugs = swarm({ cx: 1050, cy: 290, spread: 250, count: 50 });
+    scene.appendChild(bugs.node);
+    bugs.setPopulation(0.45);
 
-    // One nest, one chick. chickCount: 1 is the story, not a shortcut.
-    const home = nest({ x: 800, y: 500, s: 1, chickCount: 1 });
+    const home = nest({ x: 800, y: 430, s: 1, chickCount: 4 });
     scene.appendChild(home.node);
-    home.hatch().progress(1);
-    home.setGrowth(0.85, { duration: 0 }); // nearly ready
-    home.setEnergy(0.6);
 
-    const willow = createWillow({ scale: 0.8 });
+    const willow = createWillow({ scale: 0.55 });
     scene.appendChild(willow.node);
-    willow.setMood('hopeful');
-    gsap.set(willow.node, { x: 620, y: 450 });
+    willow.setMood('worried');
+    gsap.set(willow.node, { x: 800, y: 378 });
 
-    // Start on the whole city, end on the nest.
-    camera.set({ fx: 800, fy: 380, scale: 0.8 });
-
-    // Overlay: this frame runs the longest push in the piece (0.8 -> 1.55), so
-    // anything inside the camera group would be dragged off the head of the
-    // stage while the reader is still reading it. Raw viewBox coordinates;
-    // x=380 clears the portrait crop (x 330-1270).
-    //
-    // Both lines are the same study, so they share one citation line.
-    overlay.appendChild(
-      sourceNote(
-        `North America has lost ${FIGURES.birdLoss.value} breeding birds since 1970 - 29% of the total`,
-        { x: 380, y: 60 }
-      )
-    );
-    overlay.appendChild(
-      sourceNote(
-        `Among aerial insectivores - the birds that feed on flying insects - the loss is ` +
-          `${FIGURES.aerialInsectivoreLoss.value}`,
-        { x: 380, y: 84 }
-      )
-    );
-    overlay.appendChild(sourceNote(citeFigure('aerialInsectivoreLoss'), { x: 380, y: 108 }));
+    camera.set({ fx: 800, fy: 395, scale: 1.15 });
 
     const n1 = narrate({
-      willow: '&ldquo;I hope you&rsquo;ll find your way home too.&rdquo;',
+      willow: '&ldquo;They open their mouths right on time. It is the sky that moved.&rdquo;',
       narrator:
-        'Willow’s story is one of many already unfolding across North America - and one of the few that anyone is watching closely.',
+        'The chicks hatch on the schedule her body keeps. The days of most food have already passed over the marsh.',
     });
 
-    tl
-      // All the way back in.
-      .to(
-        camera.state,
-        { fx: 800, fy: 500, scale: 1.55, duration: 6, ease: 'power2.inOut', onUpdate: () => camera.set({}) },
-        0
-      )
-      .to(others.node, { opacity: 0.3, duration: 3 }, 1.6)
-      .to(city.node, { opacity: 0.55, duration: 3 }, 2.0)
-      .add(() => home.begAll(true), 3.6)
-      .add(revealText(n1.lines[0]), 4.2)
-      .add(stillness(0.8))
+    tl.add(home.hatch({ stagger: 0.3 }), 0.3)
+      .add(() => home.begAll(true), 1.8)
+      .add(revealText(n1.lines[0]), 2)
+      // The same trip as Scene 8, and it is worth less. She is out longer and
+      // comes back with something smaller.
+      .to(willow.node, { x: 1080, y: 290, duration: 1.2, ease: 'sine.inOut' }, 2.4)
+      .add(() => willow.carry(true), 4)
+      .to(willow.node, { x: 800, y: 378, duration: 1.2, ease: 'sine.inOut' }, 4.1)
+      .add(() => {
+        willow.carry(false);
+        home.feed(0);
+        home.setEnergy(0.6); // Scene 8 settled at 0.95
+      }, 5.3)
       .add(revealText(n1.lines[1]), 5.6)
-      .add(stillness(1.4));
+      .add(stillness(1.2)); // they are still begging when the frame ends
 
-    ctx.scrollCue('What helps?');
+    audio.bed('insects', { volume: 0.1 });
+
+    ctx.scrollCue('What is holding it together?');
   },
 };

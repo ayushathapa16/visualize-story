@@ -97,11 +97,11 @@ export const FIGURES = {
     study: 'winkler2013',
   },
   // PARKED ON PURPOSE, and it is the only unused figure in either hand-written
-  // data module. It belongs to Scene 15 by subject - about one year in three is
-  // a year when half the nests fledge nothing - and Scene 15 deliberately shows
+  // data module. It belongs to Scene 25 by subject - about one year in three is
+  // a year when half the nests fledge nothing - and Scene 25 deliberately shows
   // ONE line (nestFailureRise). A second statistic over a nest that has stopped
   // moving is the frame arguing with itself. Kept here because it is read,
-  // correct and cited in docs/sources.md §F1; if Scene 15 ever gains a drawer,
+  // correct and cited in docs/sources.md §F1; if Scene 25 ever gains a drawer,
   // this is the first thing that goes in it.
   highMortalityYears: {
     value: 'about 1 year in 3',

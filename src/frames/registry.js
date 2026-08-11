@@ -1,7 +1,15 @@
 // ============================================================================
-// registry.js - ordered scenes of the story. 24 scenes, Acts I–VII.
+// registry.js - ordered scenes of the story. 34 scenes, Acts I–VII.
 //
-// Act VI-B (19-21) is the data movement: three scenes of published numbers,
+// Scenes 4-8 are Willow walking the five stages of the year one at a time, so
+// that the clock in Scene 9 is an assembly of parts the reader already knows
+// rather than a diagram handed to them whole.
+//
+// Scenes 14-18 are that same run again, in a warmer year, one link at a time
+// coming out of step - so that the clock in Scene 19 breaks over something the
+// reader has watched rather than something a caption asserts.
+//
+// Act VI-B (29-31) is the data movement: three scenes of published numbers,
 // dropped in after "my story isn't unique" and before the call to action. It is
 // the only stretch of the piece where a chart is evidence rather than
 // illustration, and every frame in it carries its citation on the stage.
@@ -35,10 +43,20 @@ import s21 from './frame21.js';
 import s22 from './frame22.js';
 import s23 from './frame23.js';
 import s24 from './frame24.js';
+import s25 from './frame25.js';
+import s26 from './frame26.js';
+import s27 from './frame27.js';
+import s28 from './frame28.js';
+import s29 from './frame29.js';
+import s30 from './frame30.js';
+import s31 from './frame31.js';
+import s32 from './frame32.js';
+import s33 from './frame33.js';
+import s34 from './frame34.js';
 
 export const FRAMES = [
-  s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12,
-  s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24,
+  s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17,
+  s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34,
 ];
 
 // Acts, for the HUD label. (Roman-numeral act → human title.)

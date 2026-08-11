@@ -1,134 +1,128 @@
-// Scene 23 - Small Actions Matter. Beat: RESPONSIBILITY (invited, never demanded).
+// Scene 23 - Searching Further. Beat: LOSS. "How long can she keep this up?"
 //
-// Five things, each one a small causal chain - because the whole story has been
-// one. The reader does not need to be told why leaving the leaves matters; they
-// watched an act of television about what happens when the insects don't come.
+// Top-down. The search radius grows with every trip, and every trip takes longer
+// than the one before. The rings are the frame: she is spending time she does
+// not have.
 //
-// The copy lives in ACTIONS (data/sources.js) with everything else the story
-// asserts. Four of the five claims are mechanistic (the action produces insects,
-// or habitat) and carry no number - we cannot say how many birds a front garden
-// saves, so we don't.
-//
-// THE FIFTH IS DIFFERENT, as of 2026-07-27. "Plant native" now states a measured
-// threshold, because one study measured exactly that chain end to end (Narango
-// et al. 2018 - see docs/sources.md §G5), and it carries a citation on the stage
-// for it. The asymmetry is the point and should survive: a number appears on the
-// one card that earned one, which is what makes the silence on the other four
-// mean something rather than read as a house style.
-import { g, rect, text } from '../engine/svg.js';
-import { ACTIONS } from '../data/sources.js';
+// The narrator here has always asserted the mechanism - "cold weather keeps
+// flying insects grounded" - and until 2026-07-27 it cited nothing, while the
+// paper that measured exactly that had been sitting in phenology.js since §F
+// was written. The rings stay illustrative (there is no published curve of how
+// far a swallow flies as insects thin); the sentence under them is now sourced.
+import { circle, g } from '../engine/svg.js';
 import { sourceNote } from '../components/chart.js';
-import { citeFigure as citeContext } from '../data/context.js';
+import { FIGURES, citeFigure } from '../data/phenology.js';
+import { createWillow } from '../characters/willow.js';
+import { swarm } from '../components/insects.js';
 import { gsap } from '../engine/gsap.js';
 import { revealText } from '../engine/reveal.js';
-
-const ICONS = {
-  native: '🌼',
-  pesticide: '🚫',
-  leaves: '🍂',
-  wetland: '💧',
-  monitor: '🔭',
-};
-
-/** One paper card. Static outer transform; GSAP only ever touches the inner g. */
-function actionCard(a, x, y, w, h) {
-  const slot = g({ class: 'action-card', transform: `translate(${x} ${y})` });
-  const card = g({ class: 'action-card__inner' }, [
-    rect(0, 0, w, h, { rx: 10, fill: 'var(--paper)', filter: 'url(#paperShadow)' }),
-    rect(0, 0, 8, h, { rx: 4, fill: 'var(--sage)' }),
-  ]);
-
-  card.appendChild(text(ICONS[a.id] || '🌿', { x: 34, y: 58, 'font-size': 36 }));
-  card.appendChild(
-    text(a.title, {
-      x: 96,
-      y: 48,
-      'font-size': 23,
-      'font-family': 'var(--font-sans)',
-      'font-weight': 600,
-      fill: 'var(--ink)',
-    })
-  );
-
-  // Wrap the body by hand - SVG text has no line box, so a long sentence would
-  // simply run off the card and keep going.
-  const words = a.body.split(' ');
-  const lines = [];
-  let line = '';
-  for (const wd of words) {
-    if ((line + wd).length > 46) {
-      lines.push(line.trim());
-      line = '';
-    }
-    line += `${wd} `;
-  }
-  if (line.trim()) lines.push(line.trim());
-
-  lines.slice(0, 3).forEach((ln, i) => {
-    card.appendChild(
-      text(ln, {
-        x: 96,
-        y: 80 + i * 26,
-        'font-size': 18,
-        'font-family': 'var(--font-sans)',
-        fill: 'var(--ink-soft)',
-      })
-    );
-  });
-
-  gsap.set(card, { opacity: 0, y: 16 });
-  slot.appendChild(card);
-  return { slot, card };
-}
+import { rand } from '../engine/motion.js';
 
 export default {
-  id: 's23-small-actions',
-  title: 'Small Actions Matter',
-  act: 'VII',
+  id: 's23-searching',
+  title: 'Searching Further',
+  act: 'V',
   mood: 'day',
   build(ctx) {
-    const { scene, tl, narrate, camera } = ctx;
+    const { scene, overlay, W, H, tl, narrate, camera } = ctx;
+    const cx = 800;
+    const cy = 460;
 
-    ctx.backdrop('#e7e2cc');
+    ctx.backdrop('#7f9a5c');
 
-    const cw = 620;
-    const ch = 168;
-    const gap = 24;
-    const cards = ACTIONS.map((a, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      // The fifth card has no partner, so centre it under the other four rather
-      // than leaving it hanging in the left column.
-      const lonely = i === ACTIONS.length - 1 && ACTIONS.length % 2 === 1;
-      const x = lonely ? 180 + (cw + gap) / 2 : 180 + col * (cw + gap);
-      const c = actionCard(a, x, 190 + row * (ch + gap), cw, ch);
-      scene.appendChild(c.slot);
-      return c.card;
-    });
+    // Top-down foliage texture.
+    const foliage = g({ class: 'topdown' });
+    for (let i = 0; i < 26; i++) {
+      foliage.appendChild(circle(rand(0, W), rand(0, H), rand(10, 34), { fill: '#6e8b4e', opacity: 0.5 }));
+    }
+    scene.appendChild(foliage);
 
-    camera.set({ fx: 800, fy: 470, scale: 0.88 });
+    // A thin scatter of insects, and they thin further as she goes out. The sky
+    // is not empty - it just isn't enough, which is the finding.
+    const bugs = swarm({ cx, cy: cy - 40, spread: 620, count: 30 });
+    scene.appendChild(bugs.node);
+    bugs.setPopulation(0.3);
 
-    // The "Plant native" card is the only one of the five carrying a number, so
-    // it is the only one that needs a citation - and a card that small cannot
-    // hold one (its body is clipped to three wrapped lines). It goes here, at
-    // the head of the stage, where the rest of the piece puts its citations.
-    //
-    // Positioned in `scene` rather than `overlay` because this frame's camera is
-    // set once and never moves; y=104 sits above the card grid, which starts at
-    // y=190, and x=380 clears the portrait crop.
-    scene.appendChild(sourceNote(citeContext('nativePlantThreshold'), { x: 380, y: 104 }));
+    const nestTop = g({ transform: `translate(${cx} ${cy})` }, [
+      circle(0, 0, 40, { fill: '#5b4227' }),
+      circle(0, 0, 24, { fill: '#3b2c1a' }),
+    ]);
+
+    const rings = [1, 2, 3].map(() =>
+      circle(cx, cy, 60, {
+        fill: 'none',
+        stroke: '#c0392b',
+        'stroke-width': 3,
+        'stroke-dasharray': '6 10',
+        opacity: 0,
+      })
+    );
+    rings.forEach((r) => scene.appendChild(r));
+    scene.appendChild(nestTop);
+
+    const willow = createWillow({ scale: 0.5 });
+    scene.appendChild(willow.node);
+    willow.setMood('curious');
+    gsap.set(willow.node, { x: cx, y: cy });
+
+    // Already pulled back: the caption is revealed long before the camera eases
+    // out at the end, so the resting framing has to clear the outer ring too.
+    camera.set({ fx: cx, fy: cy, scale: 0.9 });
+
+    // On overlay, in raw viewBox coordinates: this frame eases the camera OUT
+    // (0.9 -> 0.85), and a line inside `scene` would drift and shrink with it
+    // mid-read. y=60/84 is the empty band at the head of the stage; x=380 clears
+    // the portrait crop, which shows only x 330-1270.
+    overlay.appendChild(
+      sourceNote(
+        `How many insects are flying tracks the day’s maximum temperature - it peaks at ` +
+          `${FIGURES.insectPeakTemp.value}`,
+        { x: 380, y: 60 }
+      )
+    );
+    overlay.appendChild(sourceNote(citeFigure('insectPeakTemp'), { x: 380, y: 84 }));
 
     const n1 = narrate({
-      willow: '&ldquo;Thank you for looking after our home.&rdquo;',
+      willow: '&ldquo;Where did all the insects go? How will I feed my children now?&rdquo;',
       narrator:
-        'Small actions, repeated across a city, add up to healthier habitat for birds and the insects they live on.',
+        'Cold weather keeps flying insects grounded. Even when insects are present, Tree Swallows often cannot catch enough of them to feed a brood.',
     });
 
-    tl.to(cards, { opacity: 1, y: 0, duration: 0.7, stagger: 0.3, ease: 'power2.out' }, 0.3)
-      .add(revealText(n1.lines[0]), 1.6)
-      .add(revealText(n1.lines[1]), 2.8)
-      .to({}, { duration: 1.6 });
+    // The rings share the stage with a two-voice caption pinned near the bottom
+    // of the viewport, and the outermost one printed straight through it. The
+    // constraint is: outerRadius * cameraScale must stay under ~240 stage units
+    // below centre, or the ring crosses the text. What matters here is that each
+    // ring is visibly bigger than the last, not how big the last one is.
+    const radii = [110, 185, 255];
+    rings.forEach((r, i) => {
+      tl.to(r, { attr: { r: radii[i] }, opacity: 0.8, duration: 1.4, ease: 'power1.out' }, i * 1.6);
+    });
 
-    ctx.scrollCue('One last flight');
+    // Three trips: each one farther, each one slower, each one more tired.
+    const trips = [
+      { r: 110, dur: 1.2, mood: 'curious' },
+      { r: 185, dur: 1.6, mood: 'worried' },
+      { r: 255, dur: 2.1, mood: 'tired' },
+    ];
+    trips.forEach((t, i) => {
+      const ang = -Math.PI / 2 + i * 0.7;
+      const tx = cx + Math.cos(ang) * t.r;
+      const ty = cy + Math.sin(ang) * t.r;
+      tl.add(() => willow.setMood(t.mood), i * 1.6)
+        .to(willow.node, { x: tx, y: ty, duration: t.dur, ease: 'sine.inOut' }, i * 1.6 + 0.1)
+        .to(willow.node, { x: cx, y: cy, duration: t.dur * 1.15, ease: 'sine.inOut' }, i * 1.6 + 0.1 + t.dur);
+    });
+
+    tl.to({ p: 0.3 }, {
+      p: 0.12,
+      duration: 4,
+      onUpdate() { bugs.setPopulation(this.targets()[0].p); },
+    }, 1)
+      .add(revealText(n1.lines[0]), 2.0)
+      .add(revealText(n1.lines[1]), 4.2)
+      .to(camera.state, { scale: 0.85, duration: 2, onUpdate: () => camera.set({}) }, 4.4)
+      .to({}, { duration: 1.2 });
+
+    ctx.scrollCue('');
   },
 };

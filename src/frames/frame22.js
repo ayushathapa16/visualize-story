@@ -1,144 +1,191 @@
-// Scene 22 - Sharing the City. Beat: HOPE (earned, not offered). "What can I do?"
+// Scene 22 - Three Springs. Beat: STRESS→LOSS. "Could she have done better?"
 //
-// The first frame in the piece where a number goes UP. Native flowers bloom
-// across ordinary front gardens, insects come back to them, and she feeds.
+// The reader's pick from Scene 21 plays out:
+//   early → a cold snap catches the brood
+//   mid   → a warm spring, and the chicks do well
+//   late  → the insect peak has already gone by
 //
-// This is Scene 6's mechanism running forwards again: flowers → insects → food.
-// The reader already knows how that chain works because the story spent an act
-// taking it apart. Nothing here needs explaining.
+// One of the three is genuinely good, and that matters: if every road led to
+// disaster the scene would be rigged, and the reader would feel it. The point
+// isn't that she always loses. It's that she cannot know which spring she's in.
 //
-// It does, however, need a source. Act VII asserted the native-plant chain in
-// prose and cited nothing, which left the piece's only call to action as the
-// least-evidenced thing in it. Narango et al. 2018 measured exactly this chain
-// end to end in residential yards - plants to arthropods to whether the birds
-// could raise young - and found a threshold: below ~70% native plant biomass
-// the population did not sustain itself.
+// THIS SCENE IS NOW EVIDENCE, and it is the one that most needed to be. The
+// cold-snap branch below is not a dramatic invention: it is the mechanism
+// Winkler et al. 2013 and Shipley et al. 2020 measured, in this species, at a
+// site 500 km from Toronto. A cold snap is a real defined thing - consecutive
+// days whose maximum stays under 18.5 °C, the temperature at which flying
+// insects peak - and its cost is a real measured number.
 //
-// THE SCOPE IS NOT WILLOW'S, and the label says so on the stage. Carolina
-// Chickadees, in Washington DC: a resident bird whose chicks eat caterpillars,
-// not an aerial insectivore catching flies over a wetland. It is evidence that
-// gardens decide whether insectivorous birds can breed. It is not a measurement
-// of a Tree Swallow's food supply, and this frame must never imply it is.
+// The subtlety the citation must preserve, because it is the actual finding:
+// THE COLD SNAPS HAVE NOT GOT WORSE. Their seasonal pattern is unchanged over
+// 125 years. What moved is the hatch date, into them. Do not let this frame
+// drift into "the weather is getting worse" - it is saying something sharper.
 import { rect } from '../engine/svg.js';
 import { sourceNote } from '../components/chart.js';
-import { FIGURES as CONTEXT, citeFigure as citeContext } from '../data/context.js';
-import { toronto } from '../components/toronto.js';
-import { flower, grass, tree } from '../components/flora.js';
+import { FIGURES, citeFigure } from '../data/phenology.js';
+import { nest } from '../components/nest.js';
 import { swarm } from '../components/insects.js';
-import { sun } from '../components/weather.js';
+import { cloud, precip } from '../components/weather.js';
+import { tree } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
+import { getChoice } from '../state.js';
 import { gsap } from '../engine/gsap.js';
-import { revealText } from '../engine/reveal.js';
-import { rand } from '../engine/motion.js';
+import { drift } from '../engine/motion.js';
+import { revealText, revealData } from '../engine/reveal.js';
 
 export default {
-  id: 's22-sharing-the-city',
-  title: 'Sharing the City',
-  act: 'VII',
+  id: 's22-three-springs',
+  title: 'Three Springs',
+  act: 'IV',
   mood: 'day',
   build(ctx) {
-    const { scene, overlay, W, H, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, H, tl, narrate, annotate, camera, audio } = ctx;
 
-    ctx.backdrop('#cfe0e6');
+    const sky = ctx.backdrop('#dfe6dc');
+    scene.appendChild(rect(-600, H - 130, W + 1200, 700, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 260, y: H, s: 1.6, green: '#5a7a44' }).node);
 
-    const city = toronto({ wetlandFront: false });
-    scene.appendChild(city.node);
-    gsap.set(city.node, { opacity: 0.5 }); // the city is the backdrop now, not the subject
+    const clouds = [cloud({ x: 320, y: 150, s: 1.3 }), cloud({ x: 1240, y: 180, s: 1.1 })];
+    clouds.forEach((c) => {
+      scene.appendChild(c.node);
+      drift(c.node, { x: 40, dur: 24 });
+    });
 
-    const theSun = sun({ x: 240, y: 160, r: 50 });
-    scene.appendChild(theSun.node);
-
-    // A strip of gardens across the bottom - front yards, not a nature reserve.
-    scene.appendChild(rect(-600, H - 190, W + 1200, 700, { fill: '#7f9a5c' }));
-    scene.appendChild(tree({ x: 180, y: H - 60, s: 1.2, green: '#4f7040' }).node);
-    scene.appendChild(tree({ x: 1460, y: H - 60, s: 1.1, green: '#4f7040' }).node);
-    for (let i = 0; i < 9; i++) {
-      scene.appendChild(grass({ x: rand(80, W - 80), y: H - 150 + rand(0, 30), s: rand(0.8, 1.4) }).node);
-    }
-
-    // The flowers: closed, until they aren't.
-    const COLORS = ['#e0a93b', '#c77fa0', '#b5482e', '#e8c34a', '#a86fb0'];
-    const flowers = [];
-    for (let i = 0; i < 14; i++) {
-      const f = flower({
-        x: 120 + i * 105 + rand(-18, 18),
-        y: H - 130 + rand(-20, 30),
-        s: rand(1.1, 1.7),
-        color: COLORS[i % COLORS.length],
-      });
-      scene.appendChild(f.node);
-      flowers.push(f);
-    }
-
-    // The insects that the flowers bring back.
-    const bugs = swarm({ cx: 820, cy: 420, spread: 480, count: 60 });
+    const bugs = swarm({ cx: 900, cy: 270, spread: 340, count: 50 });
     scene.appendChild(bugs.node);
-    bugs.setPopulation(0.05);
+    bugs.setPopulation(0.7);
 
-    const willow = createWillow({ scale: 0.65 });
+    const snow = precip({ w: W, h: H, count: 60, type: 'snow' });
+    scene.appendChild(snow.node);
+
+    const home = nest({ x: 800, y: 450, s: 0.9, chickCount: 4 });
+    scene.appendChild(home.node);
+
+    const willow = createWillow({ scale: 0.62 });
     scene.appendChild(willow.node);
-    willow.setMood('hopeful');
-    gsap.set(willow.node, { x: -140, y: 420 });
+    willow.setMood('curious');
+    gsap.set(willow.node, { x: 1080, y: 370 });
 
-    camera.set({ fx: 800, fy: 520, scale: 1.05 });
+    camera.set({ fx: 800, fy: 400, scale: 1.15 });
 
-    // Overlay, raw viewBox: 1.05 is barely a push, but the citation belongs at
-    // the head of the stage with every other one in the piece rather than
-    // floating over the gardens. x=380 clears the portrait crop.
-    //
-    // The claim is stated as the threshold, not as "native plants are good":
-    // a number a reader can act on is the entire argument for this frame
-    // carrying a citation at all.
+    // The citation goes on OVERLAY, not on `scene`. Overlay is outside the
+    // camera group (see engine/frame.js), and this frame runs a 1.15x push -
+    // inside the camera the line would be scaled and shifted off the head of
+    // the stage. Overlay coordinates are raw viewBox, so y=60/84 is the empty
+    // band at the top at every aspect ratio, and x=340 clears the portrait crop
+    // (which shows only x 330-1270).
     overlay.appendChild(
       sourceNote(
-        `Insect-eating birds sustained a population only where plants were over ` +
-          `${CONTEXT.nativePlantThreshold.value} native`,
+        `A cold snap: ${FIGURES.coldSnapDefinition.value} - the temperature ` +
+          `at which flying insects peak`,
         { x: 380, y: 60 }
       )
     );
-    overlay.appendChild(sourceNote(citeContext('nativePlantThreshold'), { x: 380, y: 84 }));
+    overlay.appendChild(
+      sourceNote(
+        `One 1-2 day snap can cut chick survival by ${FIGURES.coldSnapCost.value}`,
+        { x: 380, y: 84 }
+      )
+    );
+    overlay.appendChild(sourceNote(citeFigure('coldSnapCost'), { x: 380, y: 108 }));
 
     const n1 = narrate({
-      willow: '&ldquo;This helps more than you know.&rdquo;',
+      willow: '&ldquo;I can&rsquo;t predict what spring will do.&rdquo;',
       narrator:
-        'Native plants feed the insects that Tree Swallows depend on. An ornamental lawn feeds almost nothing.',
+        'Climate change has made spring less predictable. A decision that was once reliable has become a gamble.',
     });
 
-    // The gardens come in, one after another, the way a street actually changes:
-    // one yard at a time.
-    flowers.forEach((f, i) => {
-      tl.add(f.bloom(), 0.4 + i * 0.16);
-    });
+    // The actual finding, and it is sharper than "the weather is getting worse".
+    // Lands last, after the reader has watched their own choice play out.
+    const evidence = annotate(
+      `The cold snaps themselves have <strong>not</strong> changed &mdash; their seasonal pattern is
+       <strong>${FIGURES.coldSnapsUnchanged.value}</strong>. What moved is the hatch date, into them.
+       A nestling&rsquo;s chance of meeting one has gone from
+       <strong>${FIGURES.coldSnapRisk.value}</strong> &mdash; once every ten years, to once every five.<br/>
+       <em>Measured near Ithaca, New York, 1972&ndash;2015. Not a Toronto measurement.</em>`,
+      { left: '3%', top: '62%' }
+    );
 
-    tl
-      // And the sky answers.
-      .to(
-        { p: 0.05 },
-        {
-          p: 0.9,
-          duration: 3.4,
-          ease: 'power1.out',
-          onUpdate() {
-            bugs.setPopulation(this.targets()[0].p);
-          },
-        },
-        1.8
-      )
-      .add(revealText(n1.lines[0]), 2.6)
+    /** Warm spring: she timed it, and it worked. Healthy, feathered chicks. */
+    function warmSpring() {
+      const t = gsap.timeline();
+      t.add(home.hatch({ stagger: 0.2 }), 0)
+        .to({ p: 0.7 }, { p: 1, duration: 1.6, onUpdate() { bugs.setPopulation(this.targets()[0].p); } }, 0.4)
+        .add(() => willow.setMood('happy'), 1.2)
+        .add(() => home.setEnergy(1), 1.6)
+        .to({ gr: 0 }, {
+          gr: 1,
+          duration: 2.4,
+          onUpdate() { home.setGrowth(this.targets()[0].gr, { duration: 0 }); },
+        }, 1.8);
+      return t;
+    }
 
-      // She hunts the street. Three passes, and she catches something on each.
-      .to(willow.node, { x: 520, y: 380, duration: 1.6, ease: 'sine.inOut' }, 3.0)
-      .add(() => willow.carry(true), 4.4)
-      .to(willow.node, { x: 1000, y: 440, duration: 1.6, ease: 'sine.inOut' }, 4.6)
-      .add(() => willow.carry(false), 6.0)
-      .to(willow.node, { x: 1500, y: 360, duration: 1.6, ease: 'sine.inOut' }, 6.2)
+    /** Cold snap: they hatch, and then the sky shuts. */
+    function coldSnap() {
+      const t = gsap.timeline();
+      t.add(home.hatch({ stagger: 0.2 }), 0)
+        .add(() => clouds.forEach((c) => c.darken(true)), 0.6)
+        .to(sky, { attr: { fill: '#b9c2c0' }, duration: 1.6 }, 0.8)
+        .add(() => snow.start(), 1.2)
+        .to({ p: 0.7 }, {
+          p: 0.05,
+          duration: 2.2,
+          ease: 'power2.in',
+          onUpdate() { bugs.setPopulation(this.targets()[0].p); },
+        }, 1.2)
+        .add(() => willow.setMood('tired'), 1.8)
+        .add(() => home.begAll(true), 2.4)
+        .add(() => { home.setGrowth(0.25); home.setEnergy(0.3); }, 2.8)
+        .add(() => audio.play('chicks', { volume: 0.4 }), 2.6);
+      return t;
+    }
 
-      .add(revealText(n1.lines[1]), 5.2)
-      .to({}, { duration: 1.4 });
+    /** Late: no cold snap at all - the boom simply peaked without her. */
+    function tooLate() {
+      const t = gsap.timeline();
+      // The sky is briefly magnificent, and she is still sitting on eggs.
+      t.to({ p: 0.7 }, { p: 1, duration: 1, onUpdate() { bugs.setPopulation(this.targets()[0].p); } }, 0)
+        .to({ p: 1 }, {
+          p: 0.12,
+          duration: 2.6,
+          ease: 'power2.in',
+          onUpdate() { bugs.setPopulation(this.targets()[0].p); },
+        }, 1.2)
+        .add(home.hatch({ stagger: 0.2 }), 3.0) // hatching into the tail of it
+        .add(() => willow.setMood('tired'), 3.4)
+        .add(() => home.begAll(true), 4.0)
+        .add(() => { home.setGrowth(0.3); home.setEnergy(0.4); }, 4.2);
+      return t;
+    }
 
-    audio.bed('insects', { volume: 0.28 });
-    audio.bed('dawn-chorus', { volume: 0.22 });
+    const SPRINGS = { early: coldSnap, mid: warmSpring, late: tooLate };
 
-    ctx.scrollCue('What else?');
+    // The outcome must not start until the reader is actually LOOKING at this
+    // frame. Subscribing to the choice would fire it the instant they pick, back
+    // in Scene 21 - the whole spring would play out two frames away from them,
+    // and they would arrive here to find it already over. So the choice is only
+    // READ here, off this frame's own scrubbed timeline.
+    //
+    // Reading late is safe in both directions: they cannot reach Scene 22 without
+    // passing Scene 21 (which auto-picks her usual date if they scroll straight
+    // through), and if they skipped ahead entirely there is no choice on record,
+    // so she does what she'd have done without us.
+    let played = false;
+    function play() {
+      if (played) return;
+      played = true;
+      const t = (SPRINGS[getChoice()] || warmSpring)();
+      t.add(revealText(n1.lines[0]), '>-0.4').add(revealText(n1.lines[1]), '>-0.2');
+    }
+
+    // The figure lands after the spring has finished playing out - the reader
+    // watches the consequence, and only then is told it was measured.
+    tl.to({}, { duration: 1 })
+      .call(play)
+      .add(revealData(evidence), 5.5)
+      .to({}, { duration: 6 });
+
+    ctx.scrollCue('When the food runs short');
   },
 };

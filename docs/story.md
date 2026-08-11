@@ -1,7 +1,7 @@
 # One Bird's Story. Toronto's Future.
 
-The script. **21 scenes, 7 acts.** Scene number == frame file: Scene 7 is
-`src/frames/frame07.js`. Keep it that way - the moment they drift, every note in
+The script. **34 scenes, 7 acts.** Scene number == frame file: Scene 12 is
+`src/frames/frame12.js`. Keep it that way - the moment they drift, every note in
 here points at the wrong file.
 
 Every scene has two voices:
@@ -31,7 +31,7 @@ number and the piece's opening sentence is the worst place to guess; the count
 that could support it (Tommy Thompson Park's daily totals, `docs/sources.md` §D)
 has never been downloaded. The image survives without the magnitude.*
 
-*Scene 21 is this shot in reverse, at sunset. They share `parkLife` and the camera
+*Scene 31 is this shot in reverse, at sunset. They share `parkLife` and the camera
 path on purpose. Move the park here and you must move it there.*
 
 ### Scene 2 — The Journey
@@ -65,12 +65,80 @@ time. The nest cup grows under the reader's own scroll.
 > **Narrator:** Tree Swallows depend on cavities and nest boxes to raise their
 > young. Finding a safe home is the first challenge of every breeding season.
 
-*This is the nest the whole story then happens in - Scene 5 lays in it, Scene 7
-grows in it, Scene 15 goes quiet in it, Scene 21 fledges out of it.*
+*This is the nest the whole story then happens in - Scene 10 lays in it, Scene 12
+grows in it, Scene 25 goes quiet in it, Scene 31 fledges out of it.*
 
-### Scene 4 — Nature's Perfect Clock
-**Visual.** Snow melts, flowers bloom, insects emerge, the nest is finished - all
-turning like one machine. Icons first; labels only once the system is understood.
+---
+
+**Scenes 4-8 are one run, and they bend the two-voice rule on purpose.** Willow
+does the telling here and the narrator only adds what she cannot know. She has
+done this year before, so she is the one who knows what order it comes in: the
+ground, then the air, then her, then the eggs, then the mouths. One stage per
+scene, each shown as itself: a bloom, a swarm, a bird, four eggs, four mouths.
+No clock, no gears, nothing mechanical anywhere in the run. Scene 9 is where
+those same five turn out to have been one machine, and it only lands because the
+reader met them as things first.
+
+All five are illustration. No figure and no citation on any of them.
+
+### Scene 4 — The Ground Wakes
+**Visual.** The last snow goes off the marsh, grass comes up, the first blooms
+open. Willow watches from the branch above the finished nest.
+
+> **Willow:** "The ground always goes first. It knows before I do."
+>
+> **Narrator:** Warmth in the soil starts the season. Plants leaf out and flower
+> before anything that eats them is flying.
+
+### Scene 5 — The Air Fills
+**Visual.** Same wetland, a beat later. Insects come up off the water until the
+air is thick with them.
+
+> **Willow:** "Then the air starts to hum. That sound is the whole reason I fly
+> this far."
+>
+> **Narrator:** The same warmth brings the insects up, a few steps behind the
+> plants.
+
+*Not Scene 11. That frame is abundance she is eating, on a golden evening, with
+chicks to carry it back to. This is abundance arriving, and she is still sitting
+on the branch.*
+
+### Scene 6 — And Then Me
+**Visual.** She comes in from the south across a sky that is already full, and
+lands on the branch above the nest.
+
+> **Willow:** "And then me. I get here when the air is already full. Never
+> before it."
+>
+> **Narrator:** Tree Swallows travel thousands of kilometres north each spring,
+> and they arrive into a season that is already underway.
+
+*She places herself third in her own telling, which is the quiet point of the
+whole run. Keep the shot wide and level so it does not read as Scene 1 again.*
+
+### Scene 7 — Four Small Beginnings
+**Visual.** Four eggs into the cup she wove, then a held beat where nothing moves
+at all.
+
+> **Willow:** "Now I wait. Nobody ever watches this part."
+>
+> **Narrator:** Eggs are laid within days of arrival. How long she sits on them
+> sets the day the chicks meet the world.
+
+### Scene 8 — Mouths to Fill
+**Visual.** The eggs open. Four mouths go up, and she makes one trip out into the
+swarm and back with something in her beak.
+
+> **Willow:** "Four mouths open at once, and the sky has to be ready for them."
+>
+> **Narrator:** Chicks hatch into the weeks when insects are thickest. Everything
+> that happened before this is what puts the food in the air.
+
+### Scene 9 — Nature's Perfect Clock
+**Visual.** The five things from the last five scenes fly onto an empty stage and
+grow gears underneath them. Bloom, insects, swallow, eggs, chicks: one machine.
+Labels only once it is turning.
 
 > **Willow:** "Spring always knows exactly what to do."
 >
@@ -82,7 +150,7 @@ turning like one machine. Icons first; labels only once the system is understood
 
 ## ACT II — NEW LIFE
 
-### Scene 5 — New Beginnings
+### Scene 10 — New Beginnings
 **Visual.** Four eggs, one at a time. Days pass in the light. Then they crack.
 
 > **Willow:** "Welcome to Toronto, little ones."
@@ -90,7 +158,7 @@ turning like one machine. Icons first; labels only once the system is understood
 > **Narrator:** Tree Swallow chicks grow quickly. For the first weeks of their
 > lives they depend entirely on their parents for food.
 
-### Scene 6 — The Sky is Alive
+### Scene 11 — The Sky is Alive
 **Visual.** Golden evening. The air is thick with midges and flies. She hunts on
 the wing and comes back with a full beak.
 
@@ -99,11 +167,11 @@ the wing and comes back with a full beak.
 > **Narrator:** Tree Swallows feed almost entirely on flying insects. A single
 > family may eat thousands of them in a day.
 
-*This is the abundance the rest of the story removes. Scene 14 is this frame with
+*This is the abundance the rest of the story removes. Scene 24 is this frame with
 the sky emptied - same nest, same flight, nothing in the beak. It only hurts if
 this one lands first.*
 
-### Scene 7 — Growing Strong
+### Scene 12 — Growing Strong
 **Visual.** Every feeding trip makes them bigger. Feathers come in, eyes open,
 wings start to stretch - all driven by the scroll.
 
@@ -112,14 +180,14 @@ wings start to stretch - all driven by the scroll.
 > **Narrator:** Good timing gives Tree Swallow chicks the best possible start.
 > When insects are plentiful, the young grow fast.
 
-*Top of the arc. Everything after Scene 8 is subtraction.*
+*Top of the arc. Everything after Scene 13 is subtraction.*
 
 ---
 
 ## ACT III — SOMETHING CHANGES
 
-### Scene 8 — An Earlier Spring
-**Visual.** The same clock as Scene 4, running the same sequence - but early. The
+### Scene 13 — An Earlier Spring
+**Visual.** The same clock as Scene 9, running the same sequence - but early. The
 swallow's slot on the wheel comes round to nothing, because she is still over the
 Gulf.
 
@@ -133,7 +201,87 @@ Gulf.
 > not one strange spring. A single bad year is weather, and weather is something a
 > bird survives. The whole argument depends on this reading as accumulation.
 
-### Scene 9 — The Clock Breaks
+---
+
+**Scenes 14-18 are Scenes 4-8 again, in a warmer year.** Same marsh, same shots,
+same order, one link at a time coming out of step. They exist because the break
+in Scene 19 used to be asserted rather than witnessed: the reader was asked to
+accept that five things had come apart having watched none of them come apart.
+
+Three rules hold across the run, and each one is easy to lose:
+
+- **She is missing from the first two.** The ground moves and the air moves while
+  she is still over the Gulf, so Scenes 14 and 15 have no bird in them at all and
+  carry her voice from a thousand kilometres away. The empty branch is the
+  argument. Do not put a swallow in those frames to keep the reader company.
+- **Nothing is empty, only early.** The insects still come and the chicks still
+  hatch into a sky with food in it. What moved is the peak. Scene 15's swarm
+  settles at about half, never at nothing.
+- **She is not passive.** Scene 17 is the one that stops this being a story about
+  a bird who did nothing. Tree Swallows have shifted their laying earlier. It is
+  not enough, because the season moved further.
+
+Willow carries the telling, as she does in Scenes 4-8. All five are illustration:
+no figure, no citation. Scene 13 owns the lay dates, Scene 20 the widening gap,
+Scenes 21-22 the cold snaps, Scene 24 the insect loss. This run shows it
+happening and the scenes around it prove it.
+
+### Scene 14 — The Ground Wakes Without Her
+**Visual.** Scene 4's marsh with no bird in it. The snow is already gone when the
+frame opens, and the blooms go over while the reader watches.
+
+> **Willow:** "This all starts without me now. Nobody sends word that it began."
+>
+> **Narrator:** Warmth pulls the plants forward. The bloom that once waited for
+> her opens and passes weeks before she reaches the lake.
+
+### Scene 15 — The Air Fills, and Empties
+**Visual.** Scene 5's wetland, still empty of birds. The swarm rises to full,
+holds for a moment, and thins back to about half.
+
+> **Willow:** "The hum is still there when I land. It is just quieter than it
+> was."
+>
+> **Narrator:** The insects follow the same warmth. Their best days come and go
+> earlier now, so what is left when she needs it is the far side of the rise.
+
+### Scene 16 — I Leave When The Light Says
+**Visual.** Scene 6's flight, beat for beat. She arrives exactly as punctually as
+she did there, into a marsh that is past its best.
+
+> **Willow:** "Nothing down there tells me what the lake is doing. I leave when
+> the light says to leave."
+>
+> **Narrator:** Her departure is set by day length and by the weather where she
+> winters, thousands of kilometres away. It is the one part of the year that
+> cannot answer to a spring that started without her.
+
+*The concrete version of what Scene 19 then states as a rule. Keep the two from
+saying the same sentence twice.*
+
+### Scene 17 — Sooner Is Not Soon Enough
+**Visual.** Scene 7's nest, hurried. The eggs go in at half the stagger, and the
+held beat that followed them there is half as long.
+
+> **Willow:** "I do everything sooner than my mother did. It is still not soon
+> enough."
+>
+> **Narrator:** Tree Swallows have shifted. They lay earlier than they used to,
+> and the season has moved further still, so the gap keeps opening.
+
+### Scene 18 — The Mouths Open Late
+**Visual.** Scene 8's hatch and Scene 8's feeding trip, into a thinner sky. She
+is out longer and comes back with less, and the brood ends the frame short
+rather than full.
+
+> **Willow:** "They open their mouths right on time. It is the sky that moved."
+>
+> **Narrator:** The chicks hatch on the schedule her body keeps. The days of most
+> food have already passed over the marsh.
+
+---
+
+### Scene 19 — The Clock Breaks
 **Visual.** The wheel fractures. Flowers, insects, birds and chicks drift out of
 each other's teeth.
 
@@ -143,7 +291,7 @@ each other's teeth.
 > is driven by cues spread across thousands of kilometres - not by the weather
 > waiting for them at the other end.
 
-### Scene 10 — Phenological Mismatch
+### Scene 20 — Phenological Mismatch
 **Visual.** A normal year against a warmer one. The insect abundance **curve**
 slides earlier; the chicks' hatch date does not move. There is still overlap - but
 the peak has gone by before the chicks need it.
@@ -167,7 +315,7 @@ the peak has gone by before the chicks need it.
 
 ## ACT IV — THE GAMBLE
 
-### Scene 11 — A Difficult Decision
+### Scene 21 — A Difficult Decision
 **Visual.** The reader picks Willow's laying date from a calendar: early (6 May),
 her usual (18 May), or late (29 May). No outcome preview on hover, no recommended
 option - you commit before you are allowed to see what it costs. That is the
@@ -181,7 +329,7 @@ position the bird is in.
 *Default if the reader scrolls past (or is running `?nolabels`): her usual date.
 It's what she'd do without us.*
 
-### Scene 12 — Three Springs
+### Scene 22 — Three Springs
 **Visual.** The pick plays out. Early → a cold snap catches the brood. Usual → a
 warm spring, and they do well. Late → the insect peak has already gone.
 
@@ -198,7 +346,7 @@ warm spring, and they do well. Late → the insect peak has already gone.
 
 ## ACT V — HUNGER
 
-### Scene 13 — Searching Further
+### Scene 23 — Searching Further
 **Visual.** Top-down. The search radius grows with every trip, and every trip takes
 longer than the last.
 
@@ -207,8 +355,8 @@ longer than the last.
 > **Narrator:** Cold weather keeps flying insects grounded. Even when insects are
 > present, Tree Swallows often cannot catch enough of them to feed a brood.
 
-### Scene 14 — Empty Sky
-**Visual.** Scene 6 again, with the abundance taken out. Same nest, same branch,
+### Scene 24 — Empty Sky
+**Visual.** Scene 11 again, with the abundance taken out. Same nest, same branch,
 same flight - and one insect in her beak instead of a full one.
 
 > **Willow:** "I found one…"
@@ -218,7 +366,7 @@ same flight - and one insect in her beak instead of a full one.
 
 *The sky is thin, never empty. Never none.*
 
-### Scene 15 — Silence
+### Scene 25 — Silence
 **Visual.** Rain. A nest that has stopped moving. One chick that still does, barely.
 
 > **Willow:** "Please… stay with me."
@@ -233,7 +381,7 @@ same flight - and one insect in her beak instead of a full one.
 
 ## ACT VI — I'M NOT ALONE
 
-### Scene 16 — Zooming Out
+### Scene 26 — Zooming Out
 **Visual.** The camera leaves her nest and keeps going until it is over the
 province. Her nest turns out to be one of hundreds.
 
@@ -245,7 +393,7 @@ province. Her nest turns out to be one of hundreds.
 *The nests scattered across Ontario are a picture of "many", not a census. Nothing
 here is captioned with a number, and it must not be.*
 
-### Scene 17 — The Birds of Toronto
+### Scene 27 — The Birds of Toronto
 **Visual.** The flock resolves into individuals: Tree Swallow, Bobolink, Canada
 Jay, Common Loon, Wood Thrush, Barn Swallow. **Each card opens** onto that
 species' outlook.
@@ -270,8 +418,8 @@ species' outlook.
 
 ---
 
-### Scene 18 — One Bird's Story
-**Visual.** The inverse of Scene 16: all the way back down from the city to her
+### Scene 28 — One Bird's Story
+**Visual.** The inverse of Scene 26: all the way back down from the city to her
 nest, and the one chick that made it.
 
 > **Willow:** "I hope you'll find your way home too."
@@ -292,7 +440,7 @@ before "what can I do" - so the reader meets the numbers already caring about th
 MacIvor JS (2024), "The great urban shift", PLOS ONE 19(3):e0299217, CC BY 4.0,
 plus the IUCN Red List assessments bundled with its data. See `docs/sources.md`.*
 
-### Scene 19 — The Great Urban Shift
+### Scene 29 — The Great Urban Shift
 **Visual.** A recreation of the paper's **Fig 1**. One row per city, species lost
 sweeping left of a zero line and species gained sweeping right. The mirroring is
 the finding. Toronto's row is named last, once the reader has seen the field it
@@ -309,7 +457,7 @@ gained and 40–195 lost by 2081–2100, depending on emissions. **This is turno
 not migration** - which animals can live here, not which birds fly where. The
 caption says so, because the distinction is the whole integrity of the frame.*
 
-### Scene 20 — Toronto's Birds
+### Scene 30 — Toronto's Birds
 **Visual.** The same question narrowed to `Class == Aves`. Two columns on one
 scale. The lost block drains away first; only then does the smaller gained block
 stack back on. Play them together and the reader sees a swap - and it is not a
@@ -323,10 +471,10 @@ swap.
 
 *218 → 154 (SSP1-2.6) or 141 (SSP5-8.5). Roughly 130 lose their climate and only
 about 60 gain one. The 0.5 presence cut is **ours**, not the paper's, and the frame
-says so on its face; the headline city numbers in Scene 19 come from the paper's
+says so on its face; the headline city numbers in Scene 29 come from the paper's
 own table instead.*
 
-### Scene 21 — Who Is Already in Trouble
+### Scene 31 — Who Is Already in Trouble
 **Visual.** Three blocks of labelled bars: Red List category, population trend, and
 IUCN's coarse habitat systems. A drawer opens the 24 birds already listed, by name.
 
@@ -348,7 +496,7 @@ why the three counts sum past 354.*
 
 ## ACT VII — WHAT WE CAN DO
 
-### Scene 22 — Sharing the City
+### Scene 32 — Sharing the City
 **Visual.** The first frame in the piece where a number goes **up**. Native flowers
 bloom across ordinary front gardens; the insects come back to them; she feeds.
 
@@ -357,10 +505,10 @@ bloom across ordinary front gardens; the insects come back to them; she feeds.
 > **Narrator:** Native plants feed the insects that Tree Swallows depend on. An
 > ornamental lawn feeds almost nothing.
 
-*Scene 6's chain running forwards: flowers → insects → food. The reader already
+*Scene 11's chain running forwards: flowers → insects → food. The reader already
 knows how it works, because the story spent an act taking it apart.*
 
-### Scene 23 — Small Actions Matter
+### Scene 33 — Small Actions Matter
 **Visual.** Five cards: plant native, skip the pesticide, leave the leaves, restore
 wetland, monitor a nest box at Tommy Thompson Park.
 
@@ -373,7 +521,7 @@ wetland, monitor a nest box at Tommy Thompson Park.
 produces insects, or habitat - and never a quantified outcome. We cannot say how
 many birds a front garden saves, so we don't.*
 
-### Scene 24 — One Last Flight
+### Scene 34 — One Last Flight
 **Visual.** The surviving chick climbs to the rim of the nest, hesitates, and goes.
 The camera follows it out over the park and the lake and comes to rest on open
 water at sunset - the exact framing Scene 1 started from, at the other end of the

@@ -1,14 +1,14 @@
 // ============================================================================
-// chart.js - the piece's only charting vocabulary (Scenes 8, 19, 20, 21).
+// chart.js - the piece's only charting vocabulary (Scenes 13, 29, 30, 31).
 //
 // Some art in this project is illustrative: the Ontario range blobs, the Scene
-// 10 abundance curves, the Scene 9 timeline bars. They teach a shape and are
+// 10 abundance curves, the Scene 19 timeline bars. They teach a shape and are
 // never labelled with a number. THIS FILE IS THE EXCEPTION. Every mark built
 // here is a real value from a published source, which is why every chart built
 // from this file carries a citation ON THE STAGE - see sourceNote().
 //
-// The rule used to be positional - "only Scenes 19 to 21" - and it no longer is.
-// Scene 8 draws from this file too, and Scenes 6, 10, 12 and 14 use sourceNote()
+// The rule used to be positional - "only Scenes 29 to 21" - and it no longer is.
+// Scene 13 draws from this file too, and Scenes 11, 20, 22 and 24 use sourceNote()
 // beside illustrative art to cite a claim the art is making. So the register is
 // no longer signalled by WHERE you are in the story; it is signalled by whether
 // a citation is on the stage. That puts more weight on this file, not less: a
@@ -94,7 +94,7 @@ export function legend(items, { x = 0, y = 0, gap = 210 } = {}) {
 }
 
 /**
- * Scene 19 - the recreation of the paper's Fig 1.
+ * Scene 29 - the recreation of the paper's Fig 1.
  *
  * One row per city: species LOST to the left, species GAINED to the right, off a
  * shared zero line. That mirroring is the whole point of the figure - a city can
@@ -174,7 +174,7 @@ export function divergingBars({ rows, w = 900, h = 470, highlight = null }) {
 }
 
 /**
- * Scene 20 - one column of birds, splitting into what stays, what is lost and
+ * Scene 30 - one column of birds, splitting into what stays, what is lost and
  * what arrives.
  *
  * Deliberately a COLUMN and not a pair of bars: the reader has to see the same
@@ -251,7 +251,7 @@ export function stackedCount({ total, kept, lost, gained, w = 190, h = 430 }) {
 }
 
 /**
- * Scene 21 - flat categorical counts (Red List category, population trend,
+ * Scene 31 - flat categorical counts (Red List category, population trend,
  * IUCN systems). Horizontal bars, every one directly labelled with its count
  * and its name, so nothing depends on the colour.
  *

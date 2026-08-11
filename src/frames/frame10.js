@@ -1,133 +1,69 @@
-// Scene 10 - Phenological Mismatch. Beat: CONFUSION (the strongest viz).
+// Scene 10 - New Beginnings. Beat: HARMONY. "Who will feed them?"
 //
-// The one scene in the piece that makes a scientific claim, so it is the one
-// that has to be most careful about what it says.
-//
-// The claim is NOT "the chicks hatch into an empty sky". They don't. They hatch
-// into a sky that still has insects in it - just far fewer than the few days of
-// peak abundance a brood of four is built around. That is why the insect row is
-// an abundance curve rather than a bar: only a curve can show "still there, but
-// past the peak" (see components/timelineBar.js).
-//
-// The term arrives last, and it is a button: the definition, the mechanism and
-// the papers live in the drawer, so the scene itself never has to lecture.
-//
-// THE CURVES ARE STILL ILLUSTRATIVE, and must stay that way. This frame now
-// carries a citation on the stage, but the citation is for the CLAIM - that the
-// gap is widening, and how fast - not for the shape of the curves. Nobody has
-// published the abundance curve of a Toronto wetland against a brood's demand.
-// Do not read the on-stage source note as licence to label an axis.
-import { text } from '../engine/svg.js';
-import { sourceNote } from '../components/chart.js';
-import { citeFigure, FIGURES } from '../data/phenology.js';
-import { phenologyBars } from '../components/timelineBar.js';
-import { panelTrigger } from '../components/panel.js';
-import { MISMATCH } from '../data/sources.js';
+// Four eggs, one at a time. Days pass in the light. Then they crack.
+// Same nest as Scene 3 - the one the reader watched her weave.
+import { rect, el } from '../engine/svg.js';
+import { nest } from '../components/nest.js';
+import { tree } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { gsap } from '../engine/gsap.js';
-import { revealText, revealTerm } from '../engine/reveal.js';
+import { revealText } from '../engine/reveal.js';
+import { stillness } from '../engine/motion.js';
 
 export default {
-  id: 's10-mismatch',
-  title: 'Phenological Mismatch',
-  act: 'III',
+  id: 's10-new-beginnings',
+  title: 'New Beginnings',
+  act: 'II',
   mood: 'day',
   build(ctx) {
-    const { scene, overlay, tl, narrate, camera, stage } = ctx;
+    const { scene, W, H, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#efe7d2');
+    ctx.backdrop('#d9e7d0');
+    scene.appendChild(rect(-600, H - 120, W + 1200, 700, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 280, y: H, s: 1.6, green: '#4f7040' }).node);
 
-    // The header sits ABOVE the chart, not beside it - level with the Plants row
-    // it prints straight through the first curve.
-    const hdrStyle = {
-      x: 520,
-      y: 112,
-      'font-size': 28,
-      'font-family': 'var(--font-sans)',
-      'font-weight': 700,
-    };
-    const hdrBefore = text('A normal year', { ...hdrStyle, fill: 'var(--ink-soft)' });
-    const hdrAfter = text('A warmer year', { ...hdrStyle, fill: '#c0392b', opacity: 0 });
-    scene.appendChild(hdrBefore);
-    scene.appendChild(hdrAfter);
+    // "Days pass" - a light wash that swings warm and cool and warm again, so
+    // time moves without a caption having to say so.
+    const dayWash = rect(-W, -H, W * 3, H * 3, { fill: '#f0c187', opacity: 0 });
+    scene.appendChild(dayWash);
 
-    const bars = phenologyBars({ x: 520, y: 132, w: 680 });
-    scene.appendChild(bars.node);
-    bars.setShift(0);
+    const home = nest({ x: 800, y: 470, s: 1, chickCount: 4 });
+    scene.appendChild(home.node);
 
-    const willow = createWillow({ scale: 0.55 });
+    const willow = createWillow({ scale: 0.6 });
     scene.appendChild(willow.node);
-    willow.setMood('worried');
-    gsap.set(willow.node, { x: 300, y: 560 });
+    willow.setMood('hopeful');
+    gsap.set(willow.node, { x: 640, y: 400 });
 
-    // This frame stacks three tall things in one column - the biggest chart in
-    // the piece, the clickable term, and a two-voice caption. They collide the
-    // moment any of them drifts, so the framing is deliberately pulled back and
-    // the term is parked in the one clear band between the axis and the caption.
-    camera.set({ fx: 830, fy: 360, scale: 0.86 });
-
-    // Overlay (outside the camera) and at the head of the stage: this column is
-    // already three tall things deep, and the foot of the stage belongs to the
-    // two-voice caption. y=60 sits above the "A normal year" header, which the
-    // 0.86 pull-back lands at about viewBox y 147.
-    overlay.appendChild(
-      sourceNote(
-        `The gap between breeding and peak insect emergence is widening by ` +
-          `${FIGURES.ontarioMismatchRate.value}`,
-        { x: 380, y: 60 }
-      )
-    );
-    overlay.appendChild(sourceNote(citeFigure('ontarioMismatchRate'), { x: 380, y: 84 }));
+    camera.set({ fx: 800, fy: 460, scale: 1.5 });
 
     const n1 = narrate({
-      willow: '&ldquo;The insects were already disappearing when my babies needed them most.&rdquo;',
+      willow: '&ldquo;Welcome to Toronto, little ones.&rdquo;',
       narrator:
-        'Scientists call this a phenological mismatch. The chicks still hatch while insects are around - but the peak abundance that once fed a whole brood has already passed.',
+        'Tree Swallow chicks grow quickly. For the first weeks of their lives they depend entirely on their parents for food.',
     });
-
-    // The term, and the way in. It is a real button (DOM over the stage), so it
-    // is reachable by keyboard and hidden by ?nolabels along with the rest of
-    // the text.
-    // No `top` here on purpose: the stylesheet places this one. It has to sit in
-    // the clear band between the chart's axis and the caption on a wide screen,
-    // and move above the chart entirely on a short or portrait one - and an
-    // inline position from here would beat the media query that does that.
-    const trigger = panelTrigger({
-      stage,
-      label: 'Phenological Mismatch',
-      content: MISMATCH,
-    });
-    trigger.classList.add('panel-trigger--term');
-    gsap.set(trigger, { opacity: 0 });
 
     tl
-      // Rest: everything overlaps, and the peak sits right where the chicks are.
-      .to({}, { duration: 1.2 })
+      // The eggs arrive, one by one.
+      .add(home.layEggs({ stagger: 0.45 }), 0.3)
+      .add(stillness(0.8), 2.4)
 
-      // Only the insect curve moves. Everything else stays exactly where it was -
-      // that is the entire argument of the scene.
-      .to(
-        { s: 0 },
-        {
-          s: 1,
-          duration: 4,
-          ease: 'power1.inOut',
-          onUpdate() {
-            bars.setShift(this.targets()[0].s);
-          },
-        },
-        1.2
-      )
-      .to(hdrBefore, { opacity: 0, duration: 0.6 }, 2.2)
-      .to(hdrAfter, { opacity: 1, duration: 0.6 }, 2.6)
+      // Days passing over the clutch.
+      .to(dayWash, { opacity: 0.28, duration: 1.2, ease: 'sine.inOut' }, 2.6)
+      .to(dayWash, { opacity: 0, duration: 1.2, ease: 'sine.inOut' }, 3.8)
+      .to(dayWash, { opacity: 0.22, duration: 1.2, ease: 'sine.inOut' }, 5.0)
+      .to(dayWash, { opacity: 0, duration: 1.2, ease: 'sine.inOut' }, 6.2)
 
-      .add(revealText(n1.lines[0]), 5.4)
-      .add(revealText(n1.lines[1]), 6.4)
+      // And then they crack.
+      .add(home.hatch({ stagger: 0.3 }), 6.6)
+      .add(() => audio.play('chicks', { volume: 0.45 }), 7.4)
+      .add(() => home.begAll(true), 8.0)
+      .add(revealText(n1.lines[0]), 8.2)
+      .add(revealText(n1.lines[1]), 9.2)
+      .add(stillness(1.2));
 
-      // Named only once the chart has already made the point.
-      .add(revealTerm(trigger), 7.6)
-      .to({}, { duration: 1.4 });
+    audio.bed('dawn-chorus', { volume: 0.2 });
 
-    ctx.scrollCue('So when should she lay?');
+    ctx.scrollCue('They are hungry');
   },
 };

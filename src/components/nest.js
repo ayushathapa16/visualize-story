@@ -5,8 +5,8 @@
 //             setGrowth(t), begAll(), setEnergy(e), quiet() }
 //
 // Emotional attachment comes from it being literally the same nest: Willow
-// weaves it in Scene 3, lays in it in Scene 5, feeds it in Scene 6, watches it
-// grow in Scene 7, and it is the thing that goes quiet in Scene 15. One
+// weaves it in Scene 3, lays in it in Scene 10, feeds it in Scene 11, watches it
+// grow in Scene 12, and it is the thing that goes quiet in Scene 25. One
 // parameterised component, four ages - not four nests (CLAUDE.md invariant 2).
 //
 // The lifecycle dials are independent and idempotent, so a scrubbed timeline can
@@ -64,7 +64,7 @@ export function nest({ x = 800, y = 500, s = 1, chickCount = 4, built = true } =
   }
   node.appendChild(cup);
 
-  // eggs - laid in Scene 5, gone by the time the chicks are up.
+  // eggs - laid in Scene 10, gone by the time the chicks are up.
   const eggs = [];
   for (let i = 0; i < chickCount; i++) {
     const ex = (i - (chickCount - 1) / 2) * 52;
@@ -113,7 +113,7 @@ export function nest({ x = 800, y = 500, s = 1, chickCount = 4, built = true } =
 
   if (!built) buildTo(0);
 
-  /** Eggs appear one by one - "days pass" (Scene 5). */
+  /** Eggs appear one by one - "days pass" (Scene 10). */
   function layEggs({ stagger = 0.4 } = {}) {
     const tl = gsap.timeline();
     eggs.forEach((e, i) =>
@@ -147,7 +147,7 @@ export function nest({ x = 800, y = 500, s = 1, chickCount = 4, built = true } =
   }
 
   /**
-   * 0 = just hatched, 1 = feathered and ready to fledge (Scene 7).
+   * 0 = just hatched, 1 = feathered and ready to fledge (Scene 12).
    * Only meaningful on a HATCHED nest - see setEnergy's note.
    */
   function setGrowth(t, opts) {

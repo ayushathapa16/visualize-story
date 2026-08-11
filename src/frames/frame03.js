@@ -3,8 +3,8 @@
 // She lands, and she works. Grass, feathers, twigs - ferried in one trip at a
 // time, and the cup grows under the reader's own scroll (nest.buildTo).
 //
-// This is the nest the entire story then happens in: Scene 5 lays in it, Scene 7
-// grows in it, Scene 15 goes quiet in it, Scene 22 fledges out of it. Watching it
+// This is the nest the entire story then happens in: Scene 10 lays in it, Scene 12
+// grows in it, Scene 25 goes quiet in it, Scene 32 fledges out of it. Watching it
 // get made is what earns all of that.
 import { rect } from '../engine/svg.js';
 import { nest } from '../components/nest.js';
