@@ -1,127 +1,124 @@
-// Scene 11 - A Difficult Decision. Beat: STRESS. "Was that the right call?"
+// Scene 11 - The Sky is Alive. Beat: HARMONY. "Can this last?"
 //
-// The reader picks Willow's laying date. There is no right answer, and the
-// interaction is built so you can't hunt for one: no outcome preview on hover,
-// no recommended option, and the consequence only arrives after you commit.
-// That is the position the bird is in.
+// Golden evening over the wetland, and the air is thick with insects. She hunts
+// on the wing and comes back with a full beak, twice.
 //
-// The pick is remembered and Scene 12 plays it out.
+// This is the abundance the rest of the story removes. Scene 24 is this frame
+// with the sky emptied - same nest, same branch, same flight, nothing in the
+// beak. It only hurts if this one lands first.
 //
-// THE DATES USED TO BE MADE UP. May 6 / 18 / 29 were three plausible-looking
-// days with nothing behind them, printed in 40px type on a control the reader
-// is asked to act on - the most confidently-stated invented numbers in the
-// piece. No published lay-date distribution for southern Ontario was found, so
-// they are gone rather than replaced with a different guess: the options are now
-// EARLIER / WHEN SHE USUALLY WOULD / LATER, which is the only thing this scene
-// ever actually needed them to mean.
-//
-// What is real is the trade-off, and it is now cited. Shipley et al. measured
-// both ends of it over 43 years: laying early walks the brood into cold snaps,
-// and the risk of that has nearly doubled since the 1970s.
+// The one figure this frame carries is the insect/temperature peak, 18.5 °C.
+// It is deliberately introduced HERE, on the good evening, because Scene 22
+// re-reads the same number from the other side: a cold snap is days spent below
+// it. Same instrument, twice - which is why neither frame invents its own.
 import { rect } from '../engine/svg.js';
 import { sourceNote } from '../components/chart.js';
 import { FIGURES, citeFigure } from '../data/phenology.js';
 import { nest } from '../components/nest.js';
-import { tree } from '../components/flora.js';
-import { cloud } from '../components/weather.js';
 import { swarm } from '../components/insects.js';
 import { createWillow } from '../characters/willow.js';
-import { layDateCalendar } from '../components/calendar.js';
-import { setChoice } from '../state.js';
+import { tree, reeds } from '../components/flora.js';
+import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
-import { drift } from '../engine/motion.js';
 import { revealText } from '../engine/reveal.js';
 
 export default {
-  id: 's11-decision',
-  title: 'A Difficult Decision',
-  act: 'IV',
+  id: 's11-sky-alive',
+  title: 'The Sky is Alive',
+  act: 'II',
   mood: 'day',
   build(ctx) {
-    const { scene, overlay, W, H, tl, narrate, camera, stage } = ctx;
+    const { scene, overlay, W, H, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#dfe6dc');
-    scene.appendChild(rect(-600, H - 130, W + 1200, 700, { fill: '#7f9a5c' }));
-    scene.appendChild(tree({ x: 260, y: H, s: 1.6, green: '#5a7a44' }).node);
+    ctx.backdrop('#f0c187'); // golden evening
+    scene.appendChild(rect(-600, H - 120, W + 1200, 700, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 280, y: H, s: 1.6, green: '#4f7040' }).node);
+    scene.appendChild(reeds({ x: 1400, y: H - 100, s: 1.5 }).node);
 
-    [cloud({ x: 320, y: 150, s: 1.2 }), cloud({ x: 1280, y: 190, s: 1 })].forEach((c) => {
-      scene.appendChild(c.node);
-      drift(c.node, { x: 40, dur: 24 });
-    });
+    const lowSun = sun({ x: 1300, y: 240, r: 54 });
+    scene.appendChild(lowSun.node);
+    gsap.set(lowSun.node, { opacity: 0.8 });
 
-    // Some insects about - it is neither obviously too early nor obviously too
-    // late. If the sky read as empty or as swarming, the choice would be easy.
-    const bugs = swarm({ cx: 900, cy: 280, spread: 300, count: 40 });
+    // Thousands of them - midges, mosquitoes, flies, coming off the water.
+    const bugs = swarm({ cx: 880, cy: 250, spread: 420, count: 70 });
     scene.appendChild(bugs.node);
-    bugs.setPopulation(0.55);
+    bugs.setPopulation(0);
 
-    // The nest is ready and empty. No setEnergy() here - the chicks rest at
-    // scale 0 until hatch(), and setEnergy would pop them into a nest that is
-    // supposed to be holding nothing yet (see nest.js).
-    const home = nest({ x: 800, y: 430, s: 0.85, chickCount: 4 });
+    const home = nest({ x: 800, y: 470, s: 1, chickCount: 4 });
     scene.appendChild(home.node);
+    home.hatch().progress(1); // they hatched in Scene 10
+    home.setEnergy(0.95);
 
-    const willow = createWillow({ scale: 0.7 });
+    const willow = createWillow({ scale: 0.55 });
     scene.appendChild(willow.node);
-    willow.setMood('worried');
-    gsap.set(willow.node, { x: 1120, y: 350 });
+    willow.setMood('happy');
+    gsap.set(willow.node, { x: 800, y: 420 });
 
-    // Framed high so the lower half of the stage is clear for the calendar,
-    // which is a tall control.
-    camera.set({ fx: 800, fy: 320, scale: 1.0 });
+    camera.set({ fx: 800, fy: 430, scale: 1.2 });
 
-    // Head of the stage - the lower half is the calendar's, and the calendar is
-    // the tallest control in the piece. Two lines, so both arms of the trade-off
-    // are stated before the reader is asked to choose between them. Neither is
-    // attached to an option: the whole design of this interaction is that you
-    // commit without a preview of the outcome.
+    // On overlay, outside the camera group: this frame runs a 1.2x push, and a
+    // citation inside `scene` would be scaled off the top of the stage.
+    //
+    // The peak temperature is the one number this frame carries, and it is the
+    // same 18.5 °C that Scene 22 turns into a cold snap. Saying it here, while
+    // the sky is full, is what makes Scene 22's version land - it is the same
+    // instrument reading, once from the good side and once from the bad.
     overlay.appendChild(
       sourceNote(
-        `Lay earlier and the brood meets more cold snaps: that risk has gone ` +
-          `${FIGURES.coldSnapRisk.value} since the 1970s`,
+        `Flying-insect abundance peaks at a daily maximum of ${FIGURES.insectPeakTemp.value}`,
         { x: 380, y: 60 }
       )
     );
-    overlay.appendChild(
-      sourceNote(
-        `Lay later and it misses the peak: nests hatching after the last snap fledge ` +
-          `${FIGURES.fledgedAfterVsBefore.value}`,
-        { x: 380, y: 84 }
-      )
-    );
-    overlay.appendChild(sourceNote(citeFigure('coldSnapRisk'), { x: 380, y: 108 }));
+    overlay.appendChild(sourceNote(citeFigure('insectPeakTemp'), { x: 380, y: 84 }));
 
+    // "A single family may eat thousands of them in a day" used to sit here. It
+    // was an assertion with no source anywhere in the repo, and the tree swallow
+    // literature does not give a provisioning rate - Winkler et al. 2013 counted
+    // insects and chicks, never feeds per day. What that paper DOES give is the
+    // mechanism, which is the better sentence anyway: this sky is not reliably
+    // full, it is full because it is warm.
     const n1 = narrate({
-      willow: '&ldquo;Should I start now&hellip; or wait?&rdquo;',
+      willow: '&ldquo;There&rsquo;s enough food for everyone today.&rdquo;',
       narrator:
-        'Every spring, Tree Swallows face a decision they cannot win outright. Laying too early and laying too late both carry a cost.',
+        'Tree Swallows feed almost entirely on flying insects - and how many are flying is set by the temperature. On a warm evening the air is thick with them.',
     });
 
-    const cal = layDateCalendar({
-      stage,
-      question: 'When should Willow lay her eggs?',
-      options: [
-        { id: 'early', label: 'Earlier', sub: 'ahead of her usual date' },
-        { id: 'mid', label: 'As usual', sub: 'when she always has' },
-        { id: 'late', label: 'Later', sub: 'behind her usual date' },
-      ],
-      onPick(id) {
-        setChoice(id);
-        // A held beat, then her answer to it. The outcome belongs to Scene 12.
-        const t = gsap.timeline();
-        t.add(() => willow.setMood('tired'), 0.4)
-          .add(revealText(n1.lines[0]), 0.6)
-          .add(revealText(n1.lines[1]), 1.6);
-      },
-    });
+    tl
+      // The sky fills.
+      .to(
+        { p: 0 },
+        {
+          p: 1,
+          duration: 2.4,
+          onUpdate() {
+            bugs.setPopulation(this.targets()[0].p);
+          },
+        },
+        0.2
+      )
+      .add(revealText(n1.lines[0]), 1.2);
 
-    // If the reader scrolls straight past - or is running the ?nolabels Memory
-    // Test, where the calendar is hidden - the story still has to resolve. Her
-    // usual date is the honest default: it is what she'd do without us.
-    tl.to({}, { duration: 4 })
-      .call(() => cal.pick('mid'))
-      .to({}, { duration: 3 });
+    // Two feeding runs. Out into the swarm, catch, home, deliver. The full beak
+    // is the whole frame - no narration required to read it.
+    const RUNS = [
+      { t: 2.4, to: { x: 1080, y: 240 }, chick: 0 },
+      { t: 5.0, to: { x: 620, y: 220 }, chick: 2 },
+    ];
+    for (const r of RUNS) {
+      tl.to(willow.node, { ...r.to, duration: 1.1, ease: 'sine.inOut' }, r.t)
+        .add(() => willow.carry(true), r.t + 1.1) // she has one
+        .to(willow.node, { x: 800, y: 420, duration: 1.1, ease: 'sine.inOut' }, r.t + 1.2)
+        .add(() => {
+          willow.carry(false);
+          home.feed(r.chick);
+        }, r.t + 2.3);
+    }
 
-    ctx.scrollCue('Now watch it play out');
+    tl.add(revealText(n1.lines[1]), 4.4).to({}, { duration: 1.4 });
+
+    audio.bed('insects', { volume: 0.32 });
+    audio.bed('dawn-chorus', { volume: 0.2 });
+
+    ctx.scrollCue('Watch them grow');
   },
 };

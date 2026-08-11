@@ -1,140 +1,103 @@
-// Scene 14 - Empty Sky. Beat: LOSS. "How many meals can they miss?"
+// Scene 14 - The Ground Wakes Without Her. Beat: UNEASE. "Who is here to see it?"
 //
-// This is Scene 6 played again with the abundance taken out. Same nest, same
-// branch, same tree, same flight path, same golden light drained grey - and one
-// insect in her beak instead of a full one.
+// First of five, and the mirror of Scenes 4-8. That run walked the year while it
+// still worked, one stage per scene. This one walks the same five stages, on the
+// same ground, in the same shots - and shows what each of them is doing now.
+// Scene 19 then breaks the clock, over something the reader has watched happen
+// rather than something a caption asserted.
 //
-// The repetition IS the argument. Nothing here needs explaining if Scene 6 landed.
+// This frame is Scene 4's marsh with the bird taken out. She is still over the
+// Gulf and the season has started anyway: the snow is already gone when the
+// frame opens, and the blooms are already going over by the time it ends. The
+// empty branch IS the argument, so do not put a swallow in this frame to keep
+// the reader company.
 //
-// This frame carries the piece's only ONTARIO figure about this species: the 62%
-// fall in insect biomass at Long Point, an hour down the lake. It is also the
-// piece's only 🟡 SECONDARY figure - PNAS serves Probst et al. 2026 behind a 403
-// and nobody here has read it, so the number comes from the authors' press
-// release. docs/sources.md §F4 records that, and so does STUDIES.probst2026.
-// If anyone gets access: read it, and correct this if it needs correcting.
-//
-// Note it does NOT agree with Shipley et al., whose Ithaca insect record shows
-// no long-term trend at all. Different site, different window. We show the
-// Ontario one on the Ontario story and label where it was measured; we do not
-// reconcile them and we do not imply either is the general case.
+// Illustration, like all five. The lay-date and warming figures belong to Scene
+// 13, the widening gap to Scene 20, the cold snaps to 21-22. This run shows it
+// happening; the scenes around it carry the numbers.
 import { rect } from '../engine/svg.js';
-import { sourceNote } from '../components/chart.js';
-import { FIGURES, citeFigure } from '../data/phenology.js';
-// Aliased: two modules meet on this frame - Long Point (phenology) and the
-// global meta-analysis (context) - and they must not be able to borrow each
-// other's citation.
-import { FIGURES as CONTEXT, citeFigure as citeContext } from '../data/context.js';
-import { nest } from '../components/nest.js';
-import { swarm } from '../components/insects.js';
-import { createWillow } from '../characters/willow.js';
-import { tree, reeds } from '../components/flora.js';
+import { tree, grass, reeds, flower } from '../components/flora.js';
+import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
-import { stillness } from '../engine/motion.js';
+import { rand } from '../engine/motion.js';
 
 export default {
-  id: 's14-empty-sky',
-  title: 'Empty Sky',
-  act: 'V',
+  id: 's14-ground-without-her',
+  title: 'The Ground Wakes Without Her',
+  act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, overlay, W, H, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#c9d0cb'); // Scene 6's gold, gone out
-    scene.appendChild(rect(-600, H - 120, W + 1200, 700, { fill: '#6f855a' }));
-    scene.appendChild(tree({ x: 280, y: H, s: 1.6, green: '#5a7a44' }).node);
-    scene.appendChild(reeds({ x: 1400, y: H - 100, s: 1.5 }).node);
+    // Warmer and drier than Scene 4's cool late-winter light. Same place, a
+    // season that started too soon.
+    ctx.backdrop('#e9e3cd');
 
-    const bugs = swarm({ cx: 880, cy: 250, spread: 420, count: 70 });
-    scene.appendChild(bugs.node);
-    bugs.setPopulation(0.14); // a few. Not none - never none.
+    // Scene 4's composition exactly - same horizon, same tree, same reeds. The
+    // pairing only reads if it is recognisably the same shot.
+    const GROUND = 640;
+    scene.appendChild(rect(-600, GROUND, W + 1200, 900, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 250, y: GROUND + 20, s: 1.5, green: '#4f7040' }).node);
+    scene.appendChild(reeds({ x: 1400, y: GROUND + 10, s: 1.3 }).node);
 
-    const home = nest({ x: 800, y: 470, s: 1, chickCount: 4 });
-    scene.appendChild(home.node);
-    home.hatch().progress(1);
-    home.setGrowth(0.35, { duration: 0 }); // stalled - they should be further on
-    home.setEnergy(0.7);
+    for (let i = 0; i < 9; i++) {
+      scene.appendChild(grass({ x: rand(420, 1180), y: GROUND + rand(0, 26), s: rand(0.9, 1.5) }).node);
+    }
 
-    const willow = createWillow({ scale: 0.55 });
-    scene.appendChild(willow.node);
-    willow.setMood('tired');
-    gsap.set(willow.node, { x: 800, y: 420 });
+    // In Scene 4 the blooms were the last thing to arrive. Here they are open
+    // before the frame starts, and they go over while the reader watches.
+    const blooms = [];
+    for (let i = 0; i < 5; i++) {
+      const fl = flower({
+        x: 480 + i * 170 + rand(-30, 30),
+        y: GROUND + rand(-6, 18),
+        s: rand(0.9, 1.3),
+        color: '#c77fa0',
+      });
+      scene.appendChild(fl.node);
+      fl.bloom().progress(1); // already open when we get here
+      blooms.push(fl.node);
+    }
 
-    camera.set({ fx: 800, fy: 440, scale: 1.25 });
+    const highSun = sun({ x: 1240, y: 230, r: 54 });
+    scene.appendChild(highSun.node);
+    gsap.set(highSun.node, { opacity: 0.9 });
 
-    // Overlay, not `scene` - a 1.25x push would carry this off the top. And it
-    // appears with the frame rather than being revealed: this is not a
-    // punchline, it is the caption on a sky the reader is already looking at.
-    overlay.appendChild(
-      sourceNote(
-        `Insect biomass fell ${FIGURES.ontarioInsectLoss.value}`,
-        { x: 380, y: 60 }
-      )
-    );
-    overlay.appendChild(sourceNote(citeFigure('ontarioInsectLoss'), { x: 380, y: 84 }));
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 1,
+      shift: 1,
+      title: 'A warmer year',
+      note: 'The plants peak earlier than they used to',
+    });
+    overlay.appendChild(strip.node);
 
-    // The second pair is here to make the first pair SMALLER, and that is the
-    // whole reason it was added.
-    //
-    // 62% at one observatory reads, standing alone, as the rate everywhere. It
-    // is not: the largest meta-analysis of insect time series puts the average
-    // terrestrial decline at about 9% per decade, and stresses that trends vary
-    // widely even between neighbouring sites. Long Point is a place where it
-    // went badly, which is the honest version of this frame and still a sky with
-    // nothing in it.
-    //
-    // Two studies, two scopes, so each keeps its own citation line - the reader
-    // has to be able to tell which number was measured where.
-    overlay.appendChild(
-      sourceNote(
-        `Worldwide the average is smaller: terrestrial insects are down ` +
-          `${CONTEXT.terrestrialInsectTrend.value}`,
-        { x: 380, y: 120 }
-      )
-    );
-    overlay.appendChild(sourceNote(citeContext('terrestrialInsectTrend'), { x: 380, y: 144 }));
+    camera.set({ fx: 820, fy: 400, scale: 1.05 });
 
     const n1 = narrate({
-      willow: '&ldquo;I found one&hellip;&rdquo;',
+      willow: '&ldquo;This all starts without me now. Nobody sends word that it began.&rdquo;',
       narrator:
-        'The insect boom has already passed. Every trip that comes back empty makes the next day harder than the last.',
+        'Warmth pulls the plants forward. The bloom that once waited for her opens and passes weeks before she reaches the lake.',
     });
 
-    tl.add(() => home.begAll(true), 0.2)
-      // Trip one: the long way out, and she finds nothing at all.
-      .to(willow.node, { x: 1240, y: 210, duration: 1.6, ease: 'sine.inOut' }, 0.6)
-      .add(stillness(1.2)) // hunting an empty sky
-      .to(willow.node, { x: 800, y: 420, duration: 1.8, ease: 'sine.inOut' }, 3.4)
-      .add(() => willow.carry(false), 3.4) // empty beak - the mirror of Scene 6
-      .add(revealText(n1.lines[0]), 5.0)
+    // Nothing arrives in this frame. Things leave: the colour goes out of the
+    // blooms, and the branch stays empty the whole way through.
+    tl.to({}, { duration: 1.2 })
+      .add(revealText(n1.lines[0]), 0.8)
+      .add(strip.revealRow(0), 1.4)
+      .to(blooms, { opacity: 0.35, duration: 2.4, stagger: 0.18, ease: 'power1.in' }, 1.6)
+      .add(revealText(n1.lines[1]), 3.2)
+      .to({}, { duration: 1.4 });
 
-      // Trip two: she finds exactly one.
-      .to(willow.node, { x: 480, y: 240, duration: 1.6, ease: 'sine.inOut' }, 5.6)
-      .add(() => willow.carry(true), 7.0)
-      .to(willow.node, { x: 800, y: 420, duration: 1.8, ease: 'sine.inOut' }, 7.2)
-      .add(() => {
-        willow.carry(false);
-        home.feed(0); // one chick eats. Three do not.
-      }, 9.0)
+    audio.bed('wind', { volume: 0.16 });
 
-      // The sky keeps thinning while she works.
-      .to({ p: 0.14 }, {
-        p: 0.05,
-        duration: 6,
-        onUpdate() { bugs.setPopulation(this.targets()[0].p); },
-      }, 3)
-      .to({ e: 0.7 }, {
-        e: 0.4,
-        duration: 2,
-        onUpdate() { home.setEnergy(this.targets()[0].e); },
-      }, 9.2)
-      .add(revealText(n1.lines[1]), 9.6)
-      .add(stillness(1.6));
-
-    audio.stopBed('insects');
-    audio.bed('wind', { volume: 0.3 });
-    audio.play('chicks', { volume: 0.3 });
-
-    ctx.scrollCue('');
+    ctx.scrollCue('And the air with it');
   },
 };

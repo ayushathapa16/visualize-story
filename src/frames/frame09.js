@@ -1,66 +1,58 @@
-// Scene 9 - The Clock Breaks. Beat: UNEASE→CONFUSION. "What does that cost her?"
+// Scene 9 - Nature's Perfect Clock. Beat: HARMONY (iconic). "What if it slipped?"
 //
-// The wheel the reader has trusted for two scenes fractures. The gears come
-// apart: flowers, insects, birds and chicks drift out of each other's teeth.
+// The payoff of Scenes 4-8. The reader has met all five stages one at a time,
+// as themselves: a bloom, a swarm, a bird, four eggs, four mouths. Here those
+// same five arrive on an empty stage and grow gears underneath them. The parts
+// turn out to have been one machine the whole time.
 //
-// The frame is deliberately short on words. It is the sound of something
-// breaking, and then Scene 10 explains what broke.
+// The machinery is deliberately absent until this frame. An earlier pass parked
+// a gear in the corner of Scenes 4-8 and it read as a cog floating over a marsh,
+// which is worse than no callback at all.
+//
+// Because the stages are already known, the labels can arrive earlier than they
+// used to. What must not change is the order: it still turns before it is named
+// (docs/direction.md).
+//
+// Scene 13 replays this clock running early, and Scene 19 breaks it. The three
+// scenes are the same component in three states, which is the only reason the
+// break costs anything.
 import { natureClock } from '../components/gears.js';
 import { revealText } from '../engine/reveal.js';
-import { stillness } from '../engine/motion.js';
 
 export default {
-  id: 's9-clock-breaks',
-  title: 'The Clock Breaks',
-  act: 'III',
+  id: 's9-clock',
+  title: "Nature's Perfect Clock",
+  act: 'I',
   mood: 'day',
   build(ctx) {
     const { scene, tl, narrate, camera } = ctx;
 
-    ctx.backdrop('#e7ded0');
+    ctx.backdrop('#efe7d2');
 
     const clock = natureClock({ cx: 800, cy: 300 });
-    clock.showLabels();
     scene.appendChild(clock.node);
-    clock.spin(1);
+    clock.spin(1); // ambient: it is a working clock, and it works
 
-    // Lifted and pulled back, as in Scenes 4 and 8 - the lower station labels
-    // otherwise print through the caption.
+    // The clock's station labels sit ~256 units out from its centre, so the two
+    // lower ones ("Eggs hatch", "Swallow arrives") drop straight into the
+    // two-voice caption band unless the dial is lifted and the framing pulled
+    // back. Same reason in Scenes 13 and 19 - keep the three in step.
     camera.set({ fx: 800, fy: 320, scale: 0.85 });
 
     const n1 = narrate({
-      willow: '&ldquo;I wasn&rsquo;t ready.&rdquo;',
+      willow: '&ldquo;Spring always knows exactly what to do.&rdquo;',
       narrator:
-        'Long-distance migrants can’t simply leave earlier. Their migration is driven by cues spread across thousands of kilometres - not by the weather waiting for them at the other end.',
+        'For thousands of years, spring has followed an almost perfect schedule. Plants bloom, insects emerge, birds arrive, and chicks hatch - in remarkable synchrony.',
     });
 
-    // It keeps turning, and then it doesn't: a gear slips, the crack draws, and
-    // the whole mechanism loses its health.
-    tl.to({}, { duration: 1.4 })
-      .add(clock.slip(), 1.4)
-      .to(
-        { h: 1 },
-        {
-          h: 0.35,
-          duration: 3.2,
-          onUpdate() {
-            clock.setHealth(this.targets()[0].h);
-          },
-        },
-        1.7
-      )
-      // A push, but a small one: anything past ~0.95 drives the lower station
-      // labels back down into the caption band that the framing above just
-      // cleared.
-      .to(
-        camera.state,
-        { scale: 0.95, fx: 790, duration: 2.4, onUpdate: () => camera.set({}) },
-        2.0
-      )
-      .add(revealText(n1.lines[0]), 3.0)
-      .add(revealText(n1.lines[1]), 4.2)
-      .add(stillness(1.6)); // hold on the broken thing
+    // The five things arrive, become parts, mesh - and only then get named.
+    tl.add(clock.assembleFromIcons(), 0)
+      .add(revealText(n1.lines[0]), 1.6)
+      .to({}, { duration: 1.4 }) // it turns, meshed, before anything is labelled
+      .add(clock.showLabels(), 3.4)
+      .add(revealText(n1.lines[1]), 4)
+      .to({}, { duration: 1.4 });
 
-    ctx.scrollCue('What broke, exactly?');
+    ctx.scrollCue('Four eggs');
   },
 };

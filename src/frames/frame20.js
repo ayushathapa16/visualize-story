@@ -1,160 +1,133 @@
-// Scene 20 - Toronto's Birds. Beat: NARROWING. "How many of us are left?"
+// Scene 20 - Phenological Mismatch. Beat: CONFUSION (the strongest viz).
 //
-// Scene 19 counted every animal. This frame keeps only Class == Aves and asks
-// the question the whole story has been circling: how many kinds of bird can
-// still live here?
+// The one scene in the piece that makes a scientific claim, so it is the one
+// that has to be most careful about what it says.
 //
-// This is the frame where the piece stops being comfortable. For Toronto as a
-// whole the paper predicts a net species GAIN. For birds specifically it is a
-// net LOSS - 218 species have a suitable Toronto climate today, 154 under the
-// low scenario and 141 under the high one. The column has to shrink for that to
-// land, which is why the lost block drains away BEFORE the smaller gained block
-// stacks back on. Play them together and the reader reads a swap. It is not a
-// swap; the replacement doesn't cover the loss.
+// The claim is NOT "the chicks hatch into an empty sky". They don't. They hatch
+// into a sky that still has insects in it - just far fewer than the few days of
+// peak abundance a brood of four is built around. That is why the insect row is
+// an abundance curve rather than a bar: only a curve can show "still there, but
+// past the peak" (see components/timelineBar.js).
 //
-// THREE CAVEATS, all of them on the stage, none of them in a drawer:
-//   1. These are climate-suitability values (0-1), not counts of birds.
-//   2. The 0.5 presence cut is OURS. The paper's per-species MaxEnt threshold
-//      isn't published, so no headline number may be derived from this chart -
-//      Scene 19's 888 / 159 / 40 / 360 / 195 come from the paper's own table.
-//   3. This chart's scenarios are ssp126/ssp370/ssp585, from
-//      climateProjections.csv. Scene 19's middle scenario is ssp245, from
-//      AppendixTable2.csv. The published data disagrees with itself and we do
-//      not reconcile it - each chart says which file it came from.
-import { stackedCount, sourceNote, legend, LOSS, GAIN } from '../components/chart.js';
-import { TORONTO_BIRDS } from '../data/torontoBirds.js';
-import { g, text } from '../engine/svg.js';
-import { revealText, revealData } from '../engine/reveal.js';
-
-const CITE =
-  'Filazzola et al. 2024, PLOS ONE 19(3):e0299217 · climateProjections.csv · CC BY 4.0';
+// The term arrives last, and it is a button: the definition, the mechanism and
+// the papers live in the drawer, so the scene itself never has to lecture.
+//
+// THE CURVES ARE STILL ILLUSTRATIVE, and must stay that way. This frame now
+// carries a citation on the stage, but the citation is for the CLAIM - that the
+// gap is widening, and how fast - not for the shape of the curves. Nobody has
+// published the abundance curve of a Toronto wetland against a brood's demand.
+// Do not read the on-stage source note as licence to label an axis.
+import { text } from '../engine/svg.js';
+import { sourceNote } from '../components/chart.js';
+import { citeFigure, FIGURES } from '../data/phenology.js';
+import { phenologyBars } from '../components/timelineBar.js';
+import { panelTrigger } from '../components/panel.js';
+import { MISMATCH } from '../data/sources.js';
+import { createWillow } from '../characters/willow.js';
+import { gsap } from '../engine/gsap.js';
+import { revealText, revealTerm } from '../engine/reveal.js';
 
 export default {
-  id: 's20-torontos-birds',
-  title: "Toronto's Birds",
-  act: 'VI-B',
+  id: 's20-mismatch',
+  title: 'Phenological Mismatch',
+  act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, tl, narrate, annotate, camera } = ctx;
+    const { scene, overlay, tl, narrate, camera, stage } = ctx;
 
-    ctx.backdrop('#e9e1c9');
+    ctx.backdrop('#efe7d2');
 
-    const D = TORONTO_BIRDS;
-    // Both columns sit inside viewBox x 330-1270 - the only band a portrait
-    // screen ever shows, because base.css scales the stage 1.7x there and crops
-    // the margins. The right column started at x 900 and its callout labels ran
-    // off the edge of a phone.
-    const cols = [
-      { ssp: 'ssp126', x: 380, title: 'SSP1-2.6', sub: 'if we cut emissions' },
-      { ssp: 'ssp585', x: 830, title: 'SSP5-8.5', sub: 'if we do not' },
-    ];
+    // The header sits ABOVE the chart, not beside it - level with the Plants row
+    // it prints straight through the first curve.
+    const hdrStyle = {
+      x: 520,
+      y: 112,
+      'font-size': 28,
+      'font-family': 'var(--font-sans)',
+      'font-weight': 700,
+    };
+    const hdrBefore = text('A normal year', { ...hdrStyle, fill: 'var(--ink-soft)' });
+    const hdrAfter = text('A warmer year', { ...hdrStyle, fill: '#c0392b', opacity: 0 });
+    scene.appendChild(hdrBefore);
+    scene.appendChild(hdrAfter);
 
-    // Two columns, one scale. Both are drawn against the same 218 and the same
-    // pixel height, so their finished heights are directly comparable - this is
-    // the reason the piece never uses two y-axes.
-    const charts = cols.map((c) => {
-      const r = D.richness[c.ssp];
-      const chart = stackedCount({
-        total: r.now,
-        kept: r.now - r.lostByEnd,
-        lost: r.lostByEnd,
-        gained: r.gainedByEnd,
-        w: 200,
-        h: 360,
-      });
-      // Raised, and the columns shortened, so that the column, its two title
-      // lines and the legend all clear the caption band on a 620px-tall window
-      // - where the caption climbs to about viewBox y 700.
-      const wrap = g({ transform: `translate(${c.x} 205)` });
-      wrap.appendChild(chart.node);
-      wrap.appendChild(
-        text(c.title, {
-          x: 100, y: 408, 'text-anchor': 'middle', 'font-family': 'var(--font-sans)',
-          'font-size': 24, 'font-weight': 600, fill: 'var(--ink)', class: 'chart-ink',
-        })
-      );
-      wrap.appendChild(
-        text(c.sub, {
-          x: 100, y: 436, 'text-anchor': 'middle', 'font-family': 'var(--font-sans)',
-          'font-size': 19, fill: 'var(--ink-soft)', class: 'chart-ink',
-        })
-      );
-      scene.appendChild(wrap);
-      return { ...c, chart, end: r.now - r.lostByEnd + r.gainedByEnd };
-    });
+    const bars = phenologyBars({ x: 520, y: 132, w: 680 });
+    scene.appendChild(bars.node);
+    bars.setShift(0);
 
-    scene.appendChild(
-      legend(
-        [
-          { label: 'still suitable', color: 'var(--sage)' },
-          { label: 'loses its climate', color: LOSS },
-          { label: 'gains one', color: GAIN },
-        ],
-        { x: 380, y: 676, gap: 250 }
-      )
-    );
+    const willow = createWillow({ scale: 0.55 });
+    scene.appendChild(willow.node);
+    willow.setMood('worried');
+    gsap.set(willow.node, { x: 300, y: 560 });
 
-    // Above the chart - the foot of the stage belongs to the caption, which
-    // climbs into the viewBox on a short window (see frame19 for the full note).
-    // Two lines, not one: SVG text does not wrap, and one line of this runs off
-    // the right edge of a 1600-unit viewBox.
-    scene.appendChild(
+    // This frame stacks three tall things in one column - the biggest chart in
+    // the piece, the clickable term, and a two-voice caption. They collide the
+    // moment any of them drifts, so the framing is deliberately pulled back and
+    // the term is parked in the one clear band between the axis and the caption.
+    camera.set({ fx: 830, fy: 360, scale: 0.86 });
+
+    // Overlay (outside the camera) and at the head of the stage: this column is
+    // already three tall things deep, and the foot of the stage belongs to the
+    // two-voice caption. y=60 sits above the "A normal year" header, which the
+    // 0.86 pull-back lands at about viewBox y 147.
+    overlay.appendChild(
       sourceNote(
-        `${D.meta.birdsModelled} modelled Toronto bird species · 2081-2100 · presence at suitability ≥ ${D.meta.presenceCut} (our cut, not the paper's)`,
-        { x: 380, y: 108 }
+        `The gap between breeding and peak insect emergence is widening by ` +
+          `${FIGURES.ontarioMismatchRate.value}`,
+        { x: 380, y: 60 }
       )
     );
-    scene.appendChild(sourceNote(CITE, { x: 380, y: 132 }));
-
-    camera.set({ fx: 800, fy: 470, scale: 0.9 });
+    overlay.appendChild(sourceNote(citeFigure('ontarioMismatchRate'), { x: 380, y: 84 }));
 
     const n1 = narrate({
-      willow: '&ldquo;How many of us can still live here?&rdquo;',
+      willow: '&ldquo;The insects were already disappearing when my babies needed them most.&rdquo;',
       narrator:
-        'Of the animals modelled for Toronto, 354 are birds. Today 218 of them find a climate here they can live in. New species arrive as the city warms - but for birds, fewer arrive than leave.',
+        'Scientists call this a phenological mismatch. The chicks still hatch while insects are around - but the peak abundance that once fed a whole brood has already passed.',
     });
 
-    const r126 = D.richness.ssp126;
-    const r585 = D.richness.ssp585;
-    const evidence = annotate(
-      `<strong>${r126.now}</strong> bird species today &rarr; <strong>${r126.end}</strong> if we cut emissions,
-       <strong>${r585.end}</strong> if we don&rsquo;t. Roughly
-       <strong>${r585.lostByEnd}</strong> lose their climate and only about
-       <strong>${r585.gainedByEnd}</strong> gain one.<br/>
-       <em>Climate suitability, not bird counts &mdash; the models ignore dispersal, habitat and
-       who else is already there.</em>`,
-      { left: '3%', top: '62%' }
-    );
+    // The term, and the way in. It is a real button (DOM over the stage), so it
+    // is reachable by keyboard and hidden by ?nolabels along with the rest of
+    // the text.
+    // No `top` here on purpose: the stylesheet places this one. It has to sit in
+    // the clear band between the chart's axis and the caption on a wide screen,
+    // and move above the chart entirely on a short or portrait one - and an
+    // inline position from here would beat the media query that does that.
+    const trigger = panelTrigger({
+      stage,
+      label: 'Phenological Mismatch',
+      content: MISMATCH,
+    });
+    trigger.classList.add('panel-trigger--term');
+    gsap.set(trigger, { opacity: 0 });
 
-    tl.add(revealText(n1.lines[0]), 0.2);
+    tl
+      // Rest: everything overlaps, and the peak sits right where the chicks are.
+      .to({}, { duration: 1.2 })
 
-    // Reduced motion drops the scrub (engine/scroll.js), leaving the timeline at
-    // progress 0 - where a proxy-driven growth tween would keep writing 0 over
-    // any end state. So don't add it; settle both columns instead.
-    if (ctx.reduced) {
-      charts.forEach((c) => c.chart.setProgress(1));
-    } else {
-      tl.to(
-        { p: 0 },
+      // Only the insect curve moves. Everything else stays exactly where it was -
+      // that is the entire argument of the scene.
+      .to(
+        { s: 0 },
         {
-          p: 1,
-          duration: 3.4,
+          s: 1,
+          duration: 4,
           ease: 'power1.inOut',
           onUpdate() {
-            const p = this.targets()[0].p;
-            charts.forEach((c) => c.chart.setProgress(p));
+            bars.setShift(this.targets()[0].s);
           },
         },
-        0.8
-      );
-    }
+        1.2
+      )
+      .to(hdrBefore, { opacity: 0, duration: 0.6 }, 2.2)
+      .to(hdrAfter, { opacity: 1, duration: 0.6 }, 2.6)
 
-    tl.add(revealText(n1.lines[1]), 1.8)
-      // The two end-totals arrive last, side by side, once both columns have
-      // finished moving - the comparison is the point, not either number alone.
-      .add(revealData(evidence), 4.4)
+      .add(revealText(n1.lines[0]), 5.4)
+      .add(revealText(n1.lines[1]), 6.4)
+
+      // Named only once the chart has already made the point.
+      .add(revealTerm(trigger), 7.6)
       .to({}, { duration: 1.4 });
 
-    ctx.scrollCue('Which ones are already in trouble?');
+    ctx.scrollCue('So when should she lay?');
   },
 };

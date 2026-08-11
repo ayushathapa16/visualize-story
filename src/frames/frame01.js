@@ -3,7 +3,7 @@
 // Black. Then the sun comes up over the lake, the camera glides west across the
 // water into Tommy Thompson Park, the city wakes up, and a Tree Swallow arrives.
 //
-// Scene 24 plays this move in reverse at sunset, out of the same parts. The
+// Scene 34 plays this move in reverse at sunset, out of the same parts. The
 // ending only lands if the viewer recognises the place - so if you move the park
 // or the camera path here, move them there too.
 import { rect, el, circle, g } from '../engine/svg.js';
@@ -94,7 +94,7 @@ export default {
     const blackout = rect(-W, -H, W * 3, H * 3, { fill: '#05070a', opacity: 1 });
     overlay.appendChild(blackout);
 
-    // Pushed in on open water, east of the park. Scene 22 comes to rest here.
+    // Pushed in on open water, east of the park. Scene 32 comes to rest here.
     camera.set({ fx: 1150, fy: 640, scale: 1.35 });
 
     const title = document.createElement('div');
@@ -140,7 +140,7 @@ export default {
       .to(city.node, { filter: 'brightness(1) saturate(1)', duration: 4.5, ease: 'power2.out' }, 1.0)
       .to(glints, { opacity: 0.5, duration: 2, stagger: 0.05 }, 2.0)
 
-      // The glide: west across the water, into the park. Scene 22 mirrors this.
+      // The glide: west across the water, into the park. Scene 32 mirrors this.
       .to(
         camera.state,
         { fx: 800, fy: 560, scale: 1.0, duration: 6, ease: 'power1.inOut', onUpdate: () => camera.set({}) },

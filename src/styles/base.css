@@ -853,7 +853,11 @@ body.nolabels .hit,
    bars diverging and a column shrinking, with no number to lean on. */
 body.nolabels .chart-ink,
 body.nolabels .chart-source,
-body.nolabels .chart-legend {
+body.nolabels .chart-legend,
+/* The season strip's one line of text ("A normal year" / "A warmer year") on
+   Scenes 4-8 and 14-18. Its icons and curves stay: the strip has to read as
+   four things arriving in line and then sitting apart, without being told. */
+body.nolabels .season-strip__title {
   display: none !important;
 }
 

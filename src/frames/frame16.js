@@ -1,108 +1,99 @@
-// Scene 16 - Zooming Out. Beat: REFLECTION. "Who else is up there?"
+// Scene 16 - I Leave When The Light Says. Beat: UNEASE. "Then what does she do?"
 //
-// The camera leaves her nest and keeps going until it is over the province, and
-// the one nest the reader has been living in turns out to be one of hundreds.
+// Third of five (see frame14.js), and the mechanism at the centre of the whole
+// piece. Scene 6's shot: she comes in from the south and lands on the branch
+// above her nest, flying exactly as well and exactly as punctually as she did
+// there. Nothing about her is late. The marsh is early.
 //
-// The Ontario map's geometry is illustrative paper-cut, and the nest field
-// scattered across it is illustrative too - it is a picture of "many", not a
-// census. Nothing here is captioned with a number, and it must not be.
+// The difference from Scene 6 is what she lands into: the swarm is at the
+// thinned level Scene 15 left it at, not full. Same flight, worse year.
 //
-// THAT RULE IS UNCHANGED by the drawer added below. The drawer carries a
-// DIFFERENT number - 888 species with a modelled range over the city, from the
-// Filazzola paper - and it is behind a button, closed by default. Nothing sits
-// next to the flock art. The distinction matters: "how many nests are in this
-// picture" is unanswerable and always will be; "how many bird species have been
-// recorded over Toronto" is published. Do not let the second migrate onto the
-// stage as a caption for the first.
+// Scene 19 states the general rule - long-distance migrants cannot simply leave
+// earlier. This frame is the concrete version of it, so keep the two from saying
+// the same sentence twice: here it is daylight and a wintering ground thousands
+// of kilometres away, there it is the principle.
+import { rect } from '../engine/svg.js';
+import { swarm } from '../components/insects.js';
 import { nest } from '../components/nest.js';
-import { panelTrigger } from '../components/panel.js';
-import { PAPER } from '../data/sources.js';
-import { TORONTO_BIRDS } from '../data/torontoBirds.js';
-import { flock } from '../components/flock.js';
+import { tree, reeds } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
+import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
-import { revealText, revealTerm } from '../engine/reveal.js';
+import { seasonStrip } from '../components/timelineBar.js';
+import { revealText } from '../engine/reveal.js';
 
 export default {
-  id: 's16-zoom-out',
-  title: 'Zooming Out',
-  act: 'VI',
+  id: 's16-when-light-says',
+  title: 'I Leave When The Light Says',
+  act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, tl, narrate, camera, stage } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#cfe0e6');
+    ctx.backdrop('#d5dfd4');
 
-    // Her nest, where we left it.
-    const home = nest({ x: 800, y: 470, s: 1, chickCount: 4 });
+    // Scene 6's composition.
+    const GROUND = 640;
+    scene.appendChild(rect(-600, GROUND, W + 1200, 900, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 250, y: GROUND + 20, s: 1.5, green: '#4f7040' }).node);
+    scene.appendChild(reeds({ x: 1400, y: GROUND, s: 1.3 }).node);
+
+    // The sun she actually navigates by. It is the only thing in this frame
+    // that reaches her before she gets here.
+    const daySun = sun({ x: 1240, y: 220, r: 52 });
+    scene.appendChild(daySun.node);
+    gsap.set(daySun.node, { opacity: 0.9 });
+
+    // Scene 6 had this at full. It is the same air, later in its own year.
+    const bugs = swarm({ cx: 880, cy: 320, spread: 320, count: 55 });
+    scene.appendChild(bugs.node);
+    bugs.setPopulation(0.45);
+
+    const home = nest({ x: 800, y: 450, s: 1, chickCount: 4 });
     scene.appendChild(home.node);
-    home.hatch().progress(1);
-    home.setGrowth(0.4, { duration: 0 });
-    home.setEnergy(0.35);
 
-    const willow = createWillow({ scale: 0.6 });
+    const willow = createWillow({ scale: 0.55 });
     scene.appendChild(willow.node);
-    willow.setMood('worried');
-    gsap.set(willow.node, { x: 700, y: 420 });
+    willow.setMood('tired');
+    gsap.set(willow.node, { x: W + 220, y: 250 });
 
-    // Everyone else's.
-    const others = flock({ cx: 800, cy: 420, spreadX: 620, spreadY: 300, count: 30 });
-    scene.appendChild(others.node);
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 3,
+      shift: 1,
+      title: 'A warmer year',
+      note: 'Her arrival has not moved',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(2);
 
-    camera.set({ shot: 'close', fx: 800, fy: 470, scale: 1.6 });
+    camera.set({ fx: 820, fy: 390, scale: 1 });
 
     const n1 = narrate({
-      willow: '&ldquo;I&rsquo;m not the only one.&rdquo;',
+      willow:
+        '&ldquo;Nothing down there tells me what the lake is doing. I leave when the light says to leave.&rdquo;',
       narrator:
-        'Many bird species are facing the same squeeze as the climate warms - and they are not all facing it in the same way.',
+        'Her departure is set by day length and by the weather where she winters, thousands of kilometres away. It is the one part of the year that cannot answer to a spring that started without her.',
     });
 
-    // Optional depth, opt-in, and closed by default - the scene's primary read
-    // (the camera pulling back until one nest is many) has to land without it.
-    // Same panelContent shape Scenes 10, 17 and 21 use, so no new component and
-    // no new CSS; `.panel-trigger` is already in base.css's body.nolabels list.
-    const D = TORONTO_BIRDS;
-    const trigger = panelTrigger({
-      stage,
-      // Short: the button is centred at the head of the stage and must not run
-      // to the edges of a phone. Its position is set in base.css, not inline -
-      // an inline value would beat any media query (see panel.js).
-      label: 'How many birds?',
-      content: {
-        title: 'The birds of a city',
-        body: [
-          `Filazzola and colleagues modelled which animal species have a suitable <em>climate</em> in each of the largest cities in Canada and the United States. For Toronto - a 20&times;20&nbsp;km square - <strong>${D.city.historicSpecies}</strong> species have historically been recorded with a modelled range over the city, ${D.meta.birdsModelled} of them birds.`,
-          'That is a count of <em>species</em>, not of birds, and it is a count of who has a climate they can live in - not of who is actually out there tonight. The nests in this picture are a drawing of &ldquo;many&rdquo;; they are not any of these numbers.',
-          'Scenes 19 to 21 take this apart properly.',
-        ],
-        facts: [
-          { label: 'Species with a modelled range over Toronto', value: String(D.city.historicSpecies) },
-          { label: 'Of those, birds', value: String(D.meta.birdsModelled) },
-          { label: 'Area modelled', value: 'One 20 × 20 km quadrat over the city' },
-        ],
-        sources: [PAPER],
-      },
-    });
-    gsap.set(trigger, { opacity: 0 });
-
-    tl
-      // Up, and up. She becomes small, then a dot, then one of many.
-      .to(
-        camera.state,
-        { fx: 800, fy: 440, scale: 0.8, duration: 6, ease: 'power2.inOut', onUpdate: () => camera.set({}) },
-        0
-      )
-      .to([home.node, willow.node], { opacity: 0.35, duration: 2.5 }, 2.4)
-      .add(others.showUpTo(8, 1.2), 2.6)
-      .add(others.showUpTo(18, 1.4), 3.8)
-      .add(others.showUpTo(30, 1.6), 4.8)
-      .add(revealText(n1.lines[0]), 4.4)
-      .add(revealText(n1.lines[1]), 5.6)
-      // Offered only once all thirty nests are on screen and both lines have
-      // landed - the picture makes the point, the drawer is for afterwards.
-      .add(revealTerm(trigger), 6.6)
+    // The same approach and the same landing as Scene 6, beat for beat. Only
+    // her mood on arrival differs - there she settled hopeful, here she does
+    // not settle at all.
+    tl.to(willow.node, { x: 880, y: 300, duration: 2.4, ease: 'sine.out' }, 0)
+      .add(revealText(n1.lines[0]), 1.2)
+      .to(willow.node, { x: 810, y: 385, duration: 1.1, ease: 'sine.inOut' }, 2.4)
+      .add(() => willow.setMood('worried'), 3.4)
+      .add(strip.revealRow(2), 3.4)
+      .add(revealText(n1.lines[1]), 4)
       .to({}, { duration: 1.4 });
 
-    ctx.scrollCue('Who are they?');
+    audio.bed('wind', { volume: 0.18 });
+
+    ctx.scrollCue('Sooner, then');
   },
 };

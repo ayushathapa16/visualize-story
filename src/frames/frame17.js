@@ -1,75 +1,84 @@
-// Scene 17 - The Birds of Toronto. Beat: THE TURN. "Is this still just a bird story?"
+// Scene 17 - Sooner Is Not Soon Enough. Beat: UNEASE. "Is it enough?"
 //
-// The flock resolves into individuals, and each one can be opened.
+// Fourth of five (see frame14.js), and the one that stops this being a story
+// about a bird who did nothing. Tree Swallows HAVE shifted: they lay earlier
+// than they used to. Scene 13 carries the measurement of it. This frame carries
+// the feeling of it - she does everything faster than Scene 7 showed, and the
+// season has still moved further than she has.
 //
-// This frame carries the project's ONE hard data claim - Audubon's +1.5 °C /
-// +3.0 °C figures - and the rules around it have not changed just because the
-// cards are now clickable:
+// So the eggs go in quicker than Scene 7's slow stagger, and the held beat that
+// followed them there is shorter and less restful here. Same nest, same shot,
+// less time.
 //
-//   - The continental figures are sourced and quotable, and they live in
-//     SCENARIOS (components/climate.js), not in this file.
-//   - The per-species outlooks are NOT quotable. Audubon's Ontario numbers sit
-//     behind an interactive widget that isn't scrapeable, so nothing on a card's
-//     FACE is numeric. What a card opens is prose plus the Filazzola suitability
-//     figures, where they exist - and for Tree Swallow, Common Loon and Barn
-//     Swallow they do not, so those drawers say so in words. That is the correct
-//     failure mode: silence, not a plausible-looking number.
-//
-// The camera is deliberately STATIC. engine/hit.js measures each card's box in
-// screen space and re-measures on resize; a camera push would slide the art out
-// from under its own button.
-import { birdCards } from '../components/birdCards.js';
-import { SCENARIOS, AUDUBON } from '../data/sources.js';
-import { revealText, revealData } from '../engine/reveal.js';
+// Careful not to reach for the cold-snap material: laying earlier is what puts
+// nestlings into cold snaps, and that is Scenes 21-22's subject, with the
+// figures. Do not preview it here without them.
+import { rect } from '../engine/svg.js';
+import { nest } from '../components/nest.js';
+import { tree } from '../components/flora.js';
+import { createWillow } from '../characters/willow.js';
+import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
+import { revealText } from '../engine/reveal.js';
+import { stillness } from '../engine/motion.js';
 
 export default {
-  id: 's17-birds-of-toronto',
-  title: 'The Birds of Toronto',
-  act: 'VI',
+  id: 's17-sooner-not-enough',
+  title: 'Sooner Is Not Soon Enough',
+  act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, tl, narrate, annotate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
-    ctx.backdrop('#e7e0ca');
+    ctx.backdrop('#dfe2c8');
 
-    // Passing ctx is what makes the cards openable (see birdCards.js).
-    const cards = birdCards({ x: 200, y: 190, cols: 3, ctx });
-    scene.appendChild(cards.node);
+    // Scene 7's composition.
+    const GROUND = 640;
+    scene.appendChild(rect(-600, GROUND, W + 1200, 900, { fill: '#7f9a5c' }));
+    scene.appendChild(tree({ x: 280, y: GROUND + 20, s: 1.5, green: '#4f7040' }).node);
 
-    // Framed slightly high so the bottom row clears the two-voice caption band
-    // on short viewports. Set once and left alone - see the note above.
-    camera.set({ fx: 800, fy: 470, scale: 0.94 });
+    const home = nest({ x: 800, y: 430, s: 1, chickCount: 4 });
+    scene.appendChild(home.node);
+
+    const willow = createWillow({ scale: 0.55 });
+    scene.appendChild(willow.node);
+    willow.setMood('worried');
+    gsap.set(willow.node, { x: 640, y: 360 });
+
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 3,
+      shift: 1,
+      title: 'A warmer year',
+      note: 'The year holds still while she sits',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(3);
+
+    camera.set({ fx: 800, fy: 400, scale: 1.15 });
 
     const n1 = narrate({
-      willow: '&ldquo;These are my neighbours.&rdquo;',
+      willow: '&ldquo;I do everything sooner than my mother did. It is still not soon enough.&rdquo;',
       narrator:
-        'Climate change affects every species differently. Some are expected to lose breeding habitat; others are expected to shift north. Open a card to read its outlook.',
+        'Tree Swallows have shifted. They lay earlier than they used to, and the season has moved further still, so the gap keeps opening.',
     });
 
-    const evidence = annotate(
-      `<strong>${SCENARIOS.vulnerableAt3} of ${SCENARIOS.speciesStudied}</strong> North American bird species are
-       vulnerable to extinction at <strong>+3&thinsp;°C</strong> - they may lose more than half their range.
-       Hold warming to <strong>+1.5&thinsp;°C</strong> and
-       <strong>${Math.round(SCENARIOS.betterOffAt15 * 100)}%</strong> do better - nearly
-       <strong>${SCENARIOS.savedAt15}</strong> are no longer vulnerable.<br/>
-       <em>${AUDUBON.short}, ${AUDUBON.title.split(':')[0]}</em>`,
-      // Below the grid and hard left: the HUD's act chip owns the top-left
-      // corner, and the centred caption owns the middle of the lower band.
-      { left: '3%', top: '63%' }
-    );
+    // Half Scene 7's stagger: she is hurrying, and the hurry is visible.
+    tl.add(home.layEggs({ stagger: 0.24 }), 0.3)
+      .add(revealText(n1.lines[0]), 1.4)
+      .to(willow.node, { x: 800, y: 378, duration: 0.9, ease: 'sine.inOut' }, 1.8)
+      // Scene 7 held here for 1.6. This year she gets half of that.
+      .add(stillness(0.8), 2.7)
+      .add(revealText(n1.lines[1]), 3.4)
+      .to({}, { duration: 1.4 });
 
-    tl.add(cards.reveal({ stagger: 0.26, dur: 0.8 }), 0.2)
-      // The cards slide up as they arrive; re-measure once they've landed so the
-      // hit targets sit exactly on the art.
-      .call(() => cards.sync(), null, 2.6)
-      .add(revealText(n1.lines[0]), 0.8)
-      .add(revealText(n1.lines[1]), 2.2)
-      // The number lands last, on a grid the reader has already met as neighbours.
-      .add(revealData(evidence), 3.6)
-      .to({}, { duration: 1.6 });
+    audio.bed('wind', { volume: 0.12 });
 
-    audio.play('swallow-call');
-
-    ctx.scrollCue('Back to one bird');
+    ctx.scrollCue('And still late');
   },
 };

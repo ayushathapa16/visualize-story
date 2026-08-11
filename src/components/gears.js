@@ -1,7 +1,12 @@
 // ============================================================================
 // gears.js - "Nature's Clock." Meshed gears turning in perfect sync.
 // Show ICONS first (🌸🦟🐦🥚🐥); reveal LABELS only after the viewer gets it;
-// later ONE gear slips - gradually - and a crack draws across (Frame 7).
+// later ONE gear slips - gradually - and a crack draws across (Scene 19).
+//
+// Scenes 4-8 walk the same five stages one at a time, with no machinery on
+// stage at all - a gear in a marsh reads as a mistake, not a motif. What ties
+// the run to this component is assembleFromIcons(): the five things the reader
+// just watched fly in and only then grow gears underneath them.
 // ============================================================================
 
 import { g, path, circle, text, line } from '../engine/svg.js';
@@ -50,7 +55,7 @@ export function natureClock({ cx = 800, cy = 400 } = {}) {
   // Satellite gears on a ring sized so their teeth mesh with the hub's:
   // hub outer ≈ 100*1.16 = 116, satellite outer ≈ 55*1.16 = 64 → 116 + 64 = 180.
   // The whole clock is kept compact on purpose: the camera pushes in on it in
-  // Frame 7, and a larger dial would drive the lower station labels down into
+  // Scene 19, and a larger dial would drive the lower station labels down into
   // the caption band on short viewports.
   const ringR = 180;
   const sats = [];
@@ -108,7 +113,7 @@ export function natureClock({ cx = 800, cy = 400 } = {}) {
     });
     node.appendChild(label);
     labels.push(label);
-    sats.push({ gear, iconWrap, angle: a, x: sx, y: sy });
+    sats.push({ gear, iconWrap, gearEl, iconEl, angle: a, x: sx, y: sy });
   });
 
   // Crack (hidden until slip)
@@ -141,6 +146,49 @@ export function natureClock({ cx = 800, cy = 400 } = {}) {
     sats.forEach((s) => s.gear.set({ rotation: -t * 360 * 1.8 }));
   }
 
+  /**
+   * The payoff of Scenes 4-8: the five things themselves arrive, and only then
+   * turn out to be parts.
+   *
+   * Icons come in from well outside the ring along their own station angle,
+   * big, with no machinery anywhere on stage. They land on the ring, the gear
+   * bodies grow underneath them, and the hub arrives last. Order is the story's
+   * order - bloom, insects, swallow, eggs, chicks - because that is the order
+   * the reader met them in.
+   *
+   * Positions and scales all go through xform() (invariant 1 in CLAUDE.md);
+   * only opacity is animated with plain GSAP.
+   */
+  function assembleFromIcons({ from = 2.6, iconScale = 1.4, stagger = 0.18 } = {}) {
+    const tl = gsap.timeline();
+    gsap.set(hubEl, { opacity: 0 });
+    sats.forEach((sat) => gsap.set(sat.gearEl, { opacity: 0 }));
+
+    sats.forEach((sat, i) => {
+      const fromX = Math.cos(sat.angle) * ringR * from;
+      const fromY = Math.sin(sat.angle) * ringR * from;
+      sat.gear.set({ x: sat.x, y: sat.y, scale: 0.4 });
+      sat.iconWrap.set({ x: fromX, y: fromY, scale: iconScale });
+
+      const t = i * stagger;
+      // The thing flies in and settles.
+      tl.add(
+        sat.iconWrap.to(
+          { x: sat.x, y: sat.y, scale: 1 },
+          { duration: 1.3, ease: 'power2.out' }
+        ),
+        t
+      );
+      // Then, under it, it becomes a part.
+      tl.to(sat.gearEl, { opacity: 1, duration: 0.5 }, t + 1.1);
+      tl.add(sat.gear.to({ scale: 1 }, { duration: 0.6, ease: 'back.out(1.6)' }), t + 1.1);
+    });
+
+    // The hub last: the thing that was holding them together all along.
+    tl.to(hubEl, { opacity: 1, duration: 0.7 }, sats.length * stagger + 1.1);
+    return tl;
+  }
+
   function showLabels() {
     return gsap.to(labels, { opacity: 1, duration: 0.6, stagger: 0.12, ease: 'power2.out' });
   }
@@ -161,5 +209,17 @@ export function natureClock({ cx = 800, cy = 400 } = {}) {
     gsap.to(node, { filter: `saturate(${0.4 + hlth * 0.6})`, duration: 1 });
   }
 
-  return { node, spin, setAngle, showLabels, slip, setHealth, hub, sats, labels, crack };
+  return {
+    node,
+    spin,
+    setAngle,
+    assembleFromIcons,
+    showLabels,
+    slip,
+    setHealth,
+    hub,
+    sats,
+    labels,
+    crack,
+  };
 }

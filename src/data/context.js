@@ -120,7 +120,7 @@ export const FIGURES = {
   },
   // There is no separate `ontarioAnnualWarming` entry, and there was one for
   // about an hour. The annual figure (1.3 °C) makes the same "the warming is
-  // concentrated in the season that matters" argument that Scene 8's box
+  // concentrated in the season that matters" argument that Scene 13's box
   // already makes far better with Ithaca's 1.9 °C against 0.51 °C - so on a
   // phone it bought a third repetition of one idea at the cost of three lines
   // over the artwork. It lives inside `measured` below, where the drawer and
@@ -159,7 +159,7 @@ export const FIGURES = {
   },
 
   // --- van Klink et al. 2020 ----------------------------------------------
-  // Used on Scene 14 to make the 62% Long Point figure SMALLER. See §G4.
+  // Used on Scene 24 to make the 62% Long Point figure SMALLER. See §G4.
   terrestrialInsectTrend: {
     value: 'about 9% per decade',
     measured:
