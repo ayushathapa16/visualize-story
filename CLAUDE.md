@@ -258,6 +258,20 @@ component to tweak one frame; parameterize it. The structural pairs the story is
   Scene 9's `assembleFromIcons()` in `gears.js`: those same five icons fly in from off the ring and
   only then grow gears underneath them. Put a gear back into 4-8 and the reveal has nothing left to
   reveal.
+- **`seasonStrip()` in `timelineBar.js` is the through-line of both runs.** Scenes 4-8 build it one
+  curve per scene at `shift: 0` ("A normal year"); Scenes 14-18 rebuild it at `shift: 1` ("A warmer
+  year"), where the food rows sit earlier and the two bird rows have not moved. Both draw the same
+  module-scope `ROWS` that Scene 20's `phenologyBars()` uses - one source of truth, because the
+  recognition in Scene 20 is the whole point. **The strip shows only when things happen.** Scene
+  20's marks that argue what the timing *costs* - the demand line, the dot on the insect curve,
+  "the peak has already passed", the term and the citation - never appear on it. Nor does an axis,
+  a number or a row name: these curves are invented shapes, and anything that reads as measurement
+  promotes them into data.
+  Each scene passes a one-line `note` under the strip, and those lines obey one rule: **describe
+  what is drawn, never what it costs.** "The plants peak earlier than they used to" is a curve the
+  reader can see. "So the chicks miss the peak" is an inference, and it is Scene 20's, because
+  Scene 20 is the frame with a paper behind it. The notes and the strip header are classed
+  `season-strip__title` so `?nolabels` strips them and the curves have to carry the run alone.
 - **Scenes 14-18 ↔ Scenes 4-8** - the same five stages, the same marsh, the same shots, in a
   warmer year. Willow is absent from 14 and 15 on purpose: the season starts without her and the
   empty branch is the argument. The swarm in 15 and 18 settles at **0.45, never 0** - the sky is

@@ -1,5 +1,10 @@
 // ============================================================================
-// timelineBar.js - phenologyBars(): Scene 10, the mismatch.
+// timelineBar.js - the year as four abundance curves.
+//
+//   phenologyBars() - Scene 20, the mismatch: both states in one frame.
+//   seasonStrip()   - the small version Scenes 4-8 and 14-18 carry, one curve
+//                     per scene, so the reader has read the instrument eight
+//                     times before Scene 20 argues with it.
 //
 // Every row is an abundance CURVE, not a bar, and that is a claim about the
 // science rather than a style choice. A bar says "present / absent"; only a
@@ -20,7 +25,160 @@ import { gsap } from '../engine/gsap.js';
 const AXIS_COLOR = '#8a8069';
 const SIGMA = 0.12;
 
-/** Scene 10 - the mismatch. */
+// The four curves, at module scope because TWO components draw them. One source
+// of truth on purpose: if the strip and the payoff chart ever disagreed about
+// where a peak sits, the recognition in Scene 20 would die.
+//
+// `muBase` is where each peak falls in a normal year - they start clustered,
+// food and mouths lined up. `muShift` is how far the peak slides earlier once
+// fully warmed: the food advances, the birds don't.
+const ROWS = [
+  { key: 'plants', label: '🌱 Plants', icon: '🌱', fill: '#c77fa0', stroke: '#a85f83', muBase: 0.5, muShift: 0.22 },
+  { key: 'insects', label: '🦟 Insects', icon: '🦟', fill: '#6e8b4e', stroke: '#4f7040', muBase: 0.54, muShift: 0.2 },
+  { key: 'swallow', label: '🐦 Swallow', icon: '🐦', fill: '#3a6ea5', stroke: '#2c5580', muBase: 0.58, muShift: 0.02 },
+  { key: 'chicks', label: '🐥 Chicks', icon: '🐥', fill: '#e0a93b', stroke: '#b6842a', muBase: 0.62, muShift: 0.0 },
+];
+
+const abundance = (t, mu) => Math.exp(-((t - mu) ** 2) / (2 * SIGMA * SIGMA));
+
+/**
+ * The same four curves, small, for the scenes that walk the year one stage at a
+ * time: Scenes 4-8 at `shift: 0` ("A normal year") and Scenes 14-18 at
+ * `shift: 1` ("A warmer year"). One row arrives per scene.
+ *
+ * It shows WHEN things happen and nothing else. None of Scene 20's furniture
+ * lives here - no demand line, no dot riding the insect curve, no "peak", no
+ * citation - because those marks argue what the timing costs, and that argument
+ * belongs to the one frame carrying a paper for it.
+ *
+ * No axis labels, no numbers, no row names either. These curves are invented
+ * shapes that teach an idea (see this file's header), and anything that reads as
+ * measurement would quietly promote them into data.
+ *
+ * @param {Object} o
+ * @param {number} o.shown  how many rows are drawn, 1-4
+ * @param {number} o.shift  0 = a normal year, 1 = fully warmed
+ * @param {string} o.title  the header
+ * @param {string|string[]} o.note  a line, or lines, under the strip saying what
+ *   is happening ON IT. Every scene passes one; Scene 4 passes two, because it
+ *   is the first time a reader sees the thing and has to be told what it is.
+ *
+ *   The rule these lines live by: **describe what is drawn, never what it
+ *   costs.** "The plants peak earlier than they used to" is a description of a
+ *   curve the reader can see. "So the chicks miss the peak" is an inference,
+ *   and it is Scene 20's, because Scene 20 is the frame with a paper behind it.
+ * @returns {{ node, revealRow(i), showRows(n), rows }}
+ */
+export function seasonStrip({
+  x = 560,
+  y = 96,
+  w = 470,
+  shown = 4,
+  shift = 0,
+  title = 'A normal year',
+  note = '',
+} = {}) {
+  const node = g({ class: 'season-strip', transform: `translate(${x} ${y})` });
+  const rowH = 34;
+  const curveH = rowH * 0.82;
+
+  node.appendChild(
+    text(title, {
+      // Classed so ?nolabels can hide it: without the words the strip still has
+      // to read as curves arriving in line, then sitting apart. If it doesn't,
+      // the strip is not carrying its own weight.
+      class: 'season-strip__title',
+      x: 0,
+      y: -16,
+      'font-size': 20,
+      'font-family': 'var(--font-sans)',
+      'font-weight': 700,
+      fill: 'var(--ink-soft)',
+    })
+  );
+
+  const rows = ROWS.slice(0, shown).map((r, i) => {
+    const rowY = i * rowH;
+    const baseline = rowY + curveH;
+    const mu = r.muBase - shift * r.muShift;
+
+    const N = 48;
+    let top = '';
+    for (let k = 0; k <= N; k++) {
+      const t = k / N;
+      const px = t * w;
+      const py = rowY + curveH * (1 - abundance(t, mu));
+      top += `${k === 0 ? 'M' : 'L'}${px.toFixed(1)},${py.toFixed(1)} `;
+    }
+
+    const area = path(`${top} L${w},${baseline} L0,${baseline} Z`, { fill: r.fill, opacity: 0 });
+    const stroke = path(top, { fill: 'none', stroke: r.stroke, 'stroke-width': 2.5, opacity: 0 });
+    const icon = text(r.icon, {
+      x: -22,
+      y: baseline - 2,
+      'text-anchor': 'end',
+      'font-size': 22,
+      opacity: 0,
+    });
+    node.appendChild(area);
+    node.appendChild(stroke);
+    node.appendChild(icon);
+    return { ...r, area, stroke, icon };
+  });
+
+  // The only hint that the horizontal is time: a line the eye reads left to
+  // right. No ticks, no "early spring / late spring" - that is Scene 20's.
+  // Fixed to the full four rows, not to `shown`, so the strip occupies exactly
+  // the same box in every scene and the reader's eye never has to re-find it.
+  const axisY = ROWS.length * rowH + 6;
+  node.appendChild(
+    line(0, axisY, w, axisY, { stroke: AXIS_COLOR, 'stroke-width': 1.5, opacity: 0.5 })
+  );
+  node.appendChild(
+    path(`M${w - 10},${axisY - 5} L${w},${axisY} L${w - 10},${axisY + 5}`, {
+      fill: 'none',
+      stroke: AXIS_COLOR,
+      'stroke-width': 1.5,
+      opacity: 0.5,
+    })
+  );
+
+  [].concat(note || []).forEach((lineText, i) => {
+    node.appendChild(
+      text(lineText, {
+        class: 'season-strip__title', // hidden by ?nolabels along with the header
+        x: 0,
+        y: axisY + 26 + i * 23,
+        'font-size': 17,
+        'font-family': 'var(--font-sans)',
+        fill: 'var(--ink-soft)',
+      })
+    );
+  });
+
+  /** Fade row `i` in - played by the scene that introduces that stage. */
+  function revealRow(i) {
+    const r = rows[i];
+    const tl = gsap.timeline();
+    if (!r) return tl;
+    tl.to(r.icon, { opacity: 1, duration: 0.5 }, 0)
+      .to(r.stroke, { opacity: 1, duration: 0.7 }, 0)
+      .to(r.area, { opacity: 0.42, duration: 0.7 }, 0);
+    return tl;
+  }
+
+  /** Rows established by earlier scenes - on screen from the first frame. */
+  function showRows(n) {
+    rows.slice(0, n).forEach((r) => {
+      gsap.set([r.icon, r.stroke], { opacity: 1 });
+      gsap.set(r.area, { opacity: 0.42 });
+    });
+  }
+
+  return { node, revealRow, showRows, rows };
+}
+
+/** Scene 20 - the mismatch. */
 export function phenologyBars({ x = 360, y = 250, w = 880 } = {}) {
   const node = g({ class: 'pheno', transform: `translate(${x} ${y})` });
   // Tight rows: the chart shares the stage with a two-voice caption AND the
@@ -28,17 +186,9 @@ export function phenologyBars({ x = 360, y = 250, w = 880 } = {}) {
   const rowH = 78;
   const curveH = rowH * 0.78;
 
-  // Four abundance curves. `muBase` is where each peak falls in a normal year -
-  // they start clustered, food and mouths lined up. `muShift` is how far the
-  // peak slides earlier once fully warmed: the food advances, the birds don't.
-  const rows = [
-    { key: 'plants', label: '🌱 Plants', fill: '#c77fa0', stroke: '#a85f83', muBase: 0.5, muShift: 0.22 },
-    { key: 'insects', label: '🦟 Insects', fill: '#6e8b4e', stroke: '#4f7040', muBase: 0.54, muShift: 0.2 },
-    { key: 'swallow', label: '🐦 Swallow', fill: '#3a6ea5', stroke: '#2c5580', muBase: 0.58, muShift: 0.02 },
-    { key: 'chicks', label: '🐥 Chicks', fill: '#e0a93b', stroke: '#b6842a', muBase: 0.62, muShift: 0.0 },
-  ];
-
-  const abundance = (t, mu) => Math.exp(-((t - mu) ** 2) / (2 * SIGMA * SIGMA));
+  // The same four curves seasonStrip() has been drawing since Scene 4, which is
+  // the whole reason this chart is legible on sight (see ROWS above).
+  const rows = ROWS;
 
   // axis
   const axisY = rows.length * rowH + 30;

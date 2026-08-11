@@ -19,6 +19,7 @@ import { rect } from '../engine/svg.js';
 import { tree, grass, reeds, flower } from '../components/flora.js';
 import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 import { rand } from '../engine/motion.js';
 
@@ -28,7 +29,7 @@ export default {
   act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     // Warmer and drier than Scene 4's cool late-winter light. Same place, a
     // season that started too soon.
@@ -64,6 +65,20 @@ export default {
     scene.appendChild(highSun.node);
     gsap.set(highSun.node, { opacity: 0.9 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 1,
+      shift: 1,
+      title: 'A warmer year',
+      note: 'The plants peak earlier than they used to',
+    });
+    overlay.appendChild(strip.node);
+
     camera.set({ fx: 820, fy: 400, scale: 1.05 });
 
     const n1 = narrate({
@@ -76,6 +91,7 @@ export default {
     // blooms, and the branch stays empty the whole way through.
     tl.to({}, { duration: 1.2 })
       .add(revealText(n1.lines[0]), 0.8)
+      .add(strip.revealRow(0), 1.4)
       .to(blooms, { opacity: 0.35, duration: 2.4, stagger: 0.18, ease: 'power1.in' }, 1.6)
       .add(revealText(n1.lines[1]), 3.2)
       .to({}, { duration: 1.4 });

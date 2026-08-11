@@ -17,6 +17,7 @@ import { nest } from '../components/nest.js';
 import { tree, reeds } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 import { stillness } from '../engine/motion.js';
 
@@ -26,7 +27,7 @@ export default {
   act: 'III',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     // Scene 8's warm light, gone a little thin.
     ctx.backdrop('#e6ddc4');
@@ -49,6 +50,21 @@ export default {
     willow.setMood('worried');
     gsap.set(willow.node, { x: 800, y: 378 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 4,
+      shift: 1,
+      title: 'A warmer year',
+      note: 'The chicks have not moved either',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(3);
+
     camera.set({ fx: 800, fy: 395, scale: 1.15 });
 
     const n1 = narrate({
@@ -59,6 +75,7 @@ export default {
 
     tl.add(home.hatch({ stagger: 0.3 }), 0.3)
       .add(() => home.begAll(true), 1.8)
+      .add(strip.revealRow(3), 1.4)
       .add(revealText(n1.lines[0]), 2)
       // The same trip as Scene 8, and it is worth less. She is out longer and
       // comes back with something smaller.

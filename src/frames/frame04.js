@@ -17,6 +17,7 @@ import { tree, grass, reeds, flower } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 import { rand } from '../engine/motion.js';
 
@@ -26,7 +27,7 @@ export default {
   act: 'I',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     ctx.backdrop('#dce6e4'); // late-winter light, still cool
 
@@ -79,6 +80,23 @@ export default {
     willow.setMood('hopeful');
     gsap.set(willow.node, { x: 300, y: 330 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    // Two notes here and one everywhere else: this is the first time a reader
+    // sees the strip, so it gets told what the thing is before it is told what
+    // is happening on it.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 1,
+      shift: 0,
+      title: 'A normal year',
+      note: ['Each curve is when one part of the year happens', 'The plants go first'],
+    });
+    overlay.appendChild(strip.node);
+
     camera.set({ fx: 820, fy: 400, scale: 1.05 });
 
     const n1 = narrate({
@@ -91,7 +109,8 @@ export default {
     tl.to(snow, { opacity: 0, duration: 2, ease: 'power1.inOut' }, 0)
       .to(warmSun.node, { opacity: 0.8, duration: 2 }, 0)
       .to(greens, { opacity: 1, duration: 1.2, stagger: 0.12, ease: 'power2.out' }, 1.2)
-      .add(revealText(n1.lines[0]), 1.6);
+      .add(revealText(n1.lines[0]), 1.6)
+      .add(strip.revealRow(0), 2.8);
     blooms.forEach((fl, i) => {
       tl.to(fl.node, { opacity: 1, duration: 0.5 }, 2.6 + i * 0.18);
       tl.add(fl.bloom(), 2.7 + i * 0.18);

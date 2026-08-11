@@ -16,6 +16,7 @@ import { tree, reeds, grass } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { sun } from '../components/weather.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 import { rand } from '../engine/motion.js';
 
@@ -25,7 +26,7 @@ export default {
   act: 'I',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     ctx.backdrop('#e4e9d8');
 
@@ -55,6 +56,21 @@ export default {
     willow.setMood('curious');
     gsap.set(willow.node, { x: 300, y: 330 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 2,
+      shift: 0,
+      title: 'A normal year',
+      note: 'The insects come up just after the plants',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(1);
+
     camera.set({ fx: 820, fy: 400, scale: 1.05 });
 
     const n1 = narrate({
@@ -74,6 +90,7 @@ export default {
       },
     }, 0)
       .add(revealText(n1.lines[0]), 1.4)
+      .add(strip.revealRow(1), 1.8)
       .add(() => willow.setMood('happy'), 2.4)
       .add(revealText(n1.lines[1]), 3.6)
       .to({}, { duration: 1.4 });

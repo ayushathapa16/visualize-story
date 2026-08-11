@@ -13,6 +13,7 @@ import { nest } from '../components/nest.js';
 import { tree, reeds } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 
 export default {
@@ -21,7 +22,7 @@ export default {
   act: 'I',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     ctx.backdrop('#cfe0e6');
 
@@ -46,6 +47,21 @@ export default {
     willow.setMood('tired'); // she has just come a very long way
     gsap.set(willow.node, { x: W + 220, y: 250 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 3,
+      shift: 0,
+      title: 'A normal year',
+      note: 'She arrives after both of them',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(2);
+
     camera.set({ fx: 820, fy: 390, scale: 1 });
 
     const n1 = narrate({
@@ -59,6 +75,7 @@ export default {
       .add(revealText(n1.lines[0]), 1.2)
       .to(willow.node, { x: 810, y: 385, duration: 1.1, ease: 'sine.inOut' }, 2.4)
       .add(() => willow.setMood('hopeful'), 3.2)
+      .add(strip.revealRow(2), 3.2)
       .add(revealText(n1.lines[1]), 4)
       .to({}, { duration: 1.4 });
 

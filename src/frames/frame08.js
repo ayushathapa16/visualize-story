@@ -13,6 +13,7 @@ import { nest } from '../components/nest.js';
 import { tree, reeds } from '../components/flora.js';
 import { createWillow } from '../characters/willow.js';
 import { gsap } from '../engine/gsap.js';
+import { seasonStrip } from '../components/timelineBar.js';
 import { revealText } from '../engine/reveal.js';
 
 export default {
@@ -21,7 +22,7 @@ export default {
   act: 'I',
   mood: 'day',
   build(ctx) {
-    const { scene, W, tl, narrate, camera, audio } = ctx;
+    const { scene, overlay, W, tl, narrate, camera, audio } = ctx;
 
     ctx.backdrop('#e8dcbe');
 
@@ -43,6 +44,21 @@ export default {
     willow.setMood('curious');
     gsap.set(willow.node, { x: 800, y: 378 });
 
+    // The year as four curves, the same instrument Scene 20 later argues with.
+    // On `overlay`, outside the camera group: this frame pushes in, and a strip
+    // inside `scene` would scale and drift off the top of the stage.
+    const strip = seasonStrip({
+      x: 380,
+      y: 96,
+      w: 440,
+      shown: 4,
+      shift: 0,
+      title: 'A normal year',
+      note: 'All four peaks fall together',
+    });
+    overlay.appendChild(strip.node);
+    strip.showRows(3);
+
     camera.set({ fx: 800, fy: 395, scale: 1.15 });
 
     const n1 = narrate({
@@ -53,6 +69,7 @@ export default {
 
     tl.add(home.hatch({ stagger: 0.3 }), 0.3)
       .add(() => home.begAll(true), 1.8)
+      .add(strip.revealRow(3), 1.4)
       .add(revealText(n1.lines[0]), 2)
       // One trip: out into the swarm, back with something.
       .to(willow.node, { x: 1080, y: 290, duration: 1, ease: 'sine.inOut' }, 2.4)

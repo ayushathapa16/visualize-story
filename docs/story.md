@@ -81,6 +81,12 @@ reader met them as things first.
 
 All five are illustration. No figure and no citation on any of them.
 
+Each one carries a small four-curve strip headed **A normal year**, one curve
+arriving per scene, all four peaks in line by Scene 8. It is the same instrument
+Scene 20 later argues with, and Scenes 14-18 carry it again under **A warmer
+year**. It says only when things happen. What the timing costs is Scene 20's,
+and so are the marks that show it.
+
 ### Scene 4 — The Ground Wakes
 **Visual.** The last snow goes off the marsh, grass comes up, the first blooms
 open. Willow watches from the branch above the finished nest.
@@ -220,6 +226,10 @@ Three rules hold across the run, and each one is easy to lose:
 - **She is not passive.** Scene 17 is the one that stops this being a story about
   a bird who did nothing. Tree Swallows have shifted their laying earlier. It is
   not enough, because the season moved further.
+
+The season strip returns, headed **A warmer year** and built the same way: the
+plants and insects sit earlier than Scenes 4-8 drew them, the swallow and chicks
+exactly where they were. It still carries no demand line, no dot and no label.
 
 Willow carries the telling, as she does in Scenes 4-8. All five are illustration:
 no figure, no citation. Scene 13 owns the lay dates, Scene 20 the widening gap,
